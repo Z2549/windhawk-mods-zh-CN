@@ -1,0 +1,72 @@
+// ==WindhawkMod==
+// @id           more-space-in-language-indicator
+// @name         More space in language indicator
+// @name:zh-CN      语言指示器更多空间
+// @description  Enables to see two lines in the language indicator with small taskbar icons (Windows 10)
+// @description:zh-CN 在任务栏使用小图标时，让语言指示器能够显示两行文字（Windows 10）
+// @version      1.0
+// @author       m417z
+// @github       https://github.com/m417z
+// @twitter      https://twitter.com/m417z
+// @homepage     https://m417z.com/
+// @include      explorer.exe
+// ==/WindhawkMod==
+
+// Source code is published under The GNU General Public License v3.0.
+//
+// For bug reports and feature requests, please open an issue here:
+// https://github.com/ramensoftware/windhawk-mods/issues
+//
+// For pull requests, development takes place here:
+// https://github.com/m417z/my-windhawk-mods
+
+// ==WindhawkModReadme==
+/*
+# 语言指示器显示更多空间
+
+在使用小任务栏图标时（Windows 10），让语言指示器可显示两行。
+
+示例：
+
+![截图](https://i.imgur.com/VztpH9B.png)
+
+默认情况下，使用小任务栏按钮时 Windows 只显示一行（ENG）。
+*/
+// ==/WindhawkModReadme==
+
+HWND g_hTrayInputIndicator;
+
+using DeferWindowPos_t = decltype(&DeferWindowPos);
+DeferWindowPos_t DeferWindowPos_Original;
+HDWP WINAPI DeferWindowPos_Hook(HDWP hWinPosInfo,
+                                HWND hWnd,
+                                HWND hWndInsertAfter,
+                                int x,
+                                int y,
+                                int cx,
+                                int cy,
+                                UINT uFlags) {
+    if (!g_hTrayInputIndicator) {
+        WCHAR szClassName[32];
+        GetClassName(hWnd, szClassName, ARRAYSIZE(szClassName));
+        if (_wcsicmp(szClassName, L"TrayInputIndicatorWClass") == 0) {
+            g_hTrayInputIndicator = hWnd;
+        }
+    }
+
+    if (g_hTrayInputIndicator && hWnd == g_hTrayInputIndicator && cy < 32) {
+        cy = 32;
+    }
+
+    return DeferWindowPos_Original(hWinPosInfo, hWnd, hWndInsertAfter, x, y, cx,
+                                   cy, uFlags);
+}
+
+BOOL Wh_ModInit() {
+    Wh_Log(L">");
+
+    Wh_SetFunctionHook((void*)DeferWindowPos, (void*)DeferWindowPos_Hook,
+                       (void**)&DeferWindowPos_Original);
+
+    return TRUE;
+}
