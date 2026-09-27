@@ -4,7 +4,7 @@
 // @name:zh-CN      Windows 11 顶部任务栏
 // @description     Moves the Windows 11 taskbar to the top of the screen
 // @description:zh-CN 将 Windows 11 的任务栏整体移动到屏幕顶部，方便配合顶部栏布局使用
-// @version         1.1.7
+// @version         1.1.8
 // @author          m417z
 // @github          https://github.com/m417z
 // @twitter         https://twitter.com/m417z
@@ -65,7 +65,8 @@
   $name: Running indicators on top
   $name:zh-CN: 运行指示器显示在上方
   $description: Show running indicators above the taskbar icons.
-  $description:zh-CN: 在任务栏图标上方显示运行指示器。
+  $description:zh-CN: >-
+    在任务栏图标上方显示运行指示器。
 - startMenuAnimationAdjust: false
   $name: Adjust Start menu animation
   $name:zh-CN: 调整开始菜单动画
@@ -75,7 +76,8 @@
     of the screen. This option doesn't work with the redesigned Start menu, and
     might not work with the Phone Link sidebar and with some Start Menu Styler
     themes.
-  $description:zh-CN: 调整开始菜单的打开动画，使其与任务栏的垂直位置相匹配，例如任务栏位于屏幕左侧时从左边滑入。此选项对重新设计的开始菜单无效，并且可能对“手机连接”侧边栏以及某些开始菜单样式器主题无效。
+  $description:zh-CN: >-
+    调整开始菜单的打开动画，使其与任务栏的垂直位置相匹配，例如任务栏位于屏幕左侧时从左边滑入。此选项对重新设计的开始菜单无效，并且可能对“手机连接”侧边栏以及某些开始菜单样式器主题无效。
 */
 // ==/WindhawkModSettings==
 
@@ -141,6 +143,9 @@ std::atomic<int> g_hookCallCounter;
 bool g_inCTaskListThumbnailWnd_DisplayUI;
 bool g_inCTaskListThumbnailWnd_LayoutThumbnails;
 bool g_inOverflowFlyoutModel_Show;
+thread_local bool g_inMenuFlyout_ShowAt;
+constexpr WCHAR kMenuFlyoutPopupPropName[] =
+    L"MenuFlyoutPopup_Windhawk_" WH_MOD_ID;
 int g_lastTaskbarAlignment;
 
 std::atomic<DWORD> g_UpdateFlyoutPosition_threadId;
@@ -748,9 +753,11 @@ HRESULT WINAPI CTaskListWnd_ComputeJumpViewPosition_Hook(
     };
     GetMonitorInfo(monitor, &monitorInfo);
 
-    // Place at the bottom of the monitor, will reposition later in
+    // Place at the center of the monitor, will reposition later in
     // SetWindowPos.
-    point->Y = monitorInfo.rcWork.bottom - 1;
+    int centerY = monitorInfo.rcWork.top +
+                  (monitorInfo.rcWork.bottom - monitorInfo.rcWork.top) / 2;
+    point->Y = centerY;
 
     return ret;
 }
@@ -1241,7 +1248,11 @@ MenuFlyout_ShowAt_Hook(void* pThis,
     Wh_Log(L">");
 
     auto original = [=]() {
-        return MenuFlyout_ShowAt_Original(pThis, placementTarget, showOptions);
+        g_inMenuFlyout_ShowAt = true;
+        void* ret =
+            MenuFlyout_ShowAt_Original(pThis, placementTarget, showOptions);
+        g_inMenuFlyout_ShowAt = false;
+        return ret;
     };
 
     if (!showOptions) {
@@ -1283,7 +1294,7 @@ MenuFlyout_ShowAt_Hook(void* pThis,
         }
     }
 
-    return MenuFlyout_ShowAt_Original(pThis, placementTarget, showOptions);
+    return original();
 }
 
 bool HandleSystemTrayContextMenu(FrameworkElement element) {
@@ -1335,6 +1346,40 @@ void WINAPI DateTimeIconContent_ShowContextMenu_Hook(void* pThis) {
     if (!element || !HandleSystemTrayContextMenu(element)) {
         DateTimeIconContent_ShowContextMenu_Original(pThis);
     }
+}
+
+using CreateWindowExW_t = decltype(&CreateWindowExW);
+CreateWindowExW_t CreateWindowExW_Original;
+HWND WINAPI CreateWindowExW_Hook(DWORD dwExStyle,
+                                 LPCWSTR lpClassName,
+                                 LPCWSTR lpWindowName,
+                                 DWORD dwStyle,
+                                 int X,
+                                 int Y,
+                                 int nWidth,
+                                 int nHeight,
+                                 HWND hWndParent,
+                                 HMENU hMenu,
+                                 HINSTANCE hInstance,
+                                 PVOID lpParam) {
+    HWND hWnd = CreateWindowExW_Original(dwExStyle, lpClassName, lpWindowName,
+                                         dwStyle, X, Y, nWidth, nHeight,
+                                         hWndParent, hMenu, hInstance, lpParam);
+    if (!hWnd || !g_inMenuFlyout_ShowAt) {
+        return hWnd;
+    }
+
+    // XAML creates the windowed popup of a menu flyout during ShowAt, but
+    // positions it later, so mark it here for SetWindowPos_Hook.
+    WCHAR szClassName[64];
+    if (GetClassName(hWnd, szClassName, ARRAYSIZE(szClassName)) &&
+        _wcsicmp(szClassName, L"Xaml_WindowedPopupClass") == 0) {
+        Wh_Log(L"Menu flyout popup window created: %08X",
+               (DWORD)(ULONG_PTR)hWnd);
+        SetProp(hWnd, kMenuFlyoutPopupPropName, (HANDLE)1);
+    }
+
+    return hWnd;
 }
 
 using SetWindowPos_t = decltype(&SetWindowPos);
@@ -1394,7 +1439,8 @@ BOOL WINAPI SetWindowPos_Hook(HWND hWnd,
         }
     } else if (_wcsicmp(szClassName, L"TopLevelWindowForOverflowXamlIsland") ==
                    0 ||
-               _wcsicmp(szClassName, L"Xaml_WindowedPopupClass") == 0) {
+               (_wcsicmp(szClassName, L"Xaml_WindowedPopupClass") == 0 &&
+                !GetProp(hWnd, kMenuFlyoutPopupPropName))) {
         if (uFlags & (SWP_NOMOVE | SWP_NOSIZE)) {
             return original();
         }
@@ -2670,6 +2716,9 @@ BOOL Wh_ModInit() {
     if (!HookTaskbarDllSymbols()) {
         return FALSE;
     }
+
+    WindhawkUtils::SetFunctionHook(CreateWindowExW, CreateWindowExW_Hook,
+                                   &CreateWindowExW_Original);
 
     WindhawkUtils::SetFunctionHook(SetWindowPos, SetWindowPos_Hook,
                                    &SetWindowPos_Original);

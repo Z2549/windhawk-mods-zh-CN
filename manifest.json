@@ -6,8 +6,41 @@
   "upstream": "https://github.com/m417z",
   "name_en": "AltDrag",
   "name_zh": "AltDrag",
-  "desc_zh": "按住 Alt 键在窗口任意位置拖动即可移动窗口，无需瞄准标题栏",
+  "desc_zh": "按住 Alt 键在窗口任意位置拖动即可移动或缩放窗口，无需瞄准标题栏或边框",
   "in_m417z_set": true,
+  "installed": false
+ },
+ {
+  "mod_id": "antigravity-portable",
+  "file": "mods/antigravity-portable.wh.cpp",
+  "author": "easyatm",
+  "upstream": "https://github.com/easyatm",
+  "name_en": "Antigravity IDE Portable",
+  "name_zh": "Antigravity IDE 便携版",
+  "desc_zh": "使 Antigravity IDE 成为便携版，重定向数据与扩展目录。",
+  "in_m417z_set": false,
+  "installed": false
+ },
+ {
+  "mod_id": "caps-ime-switcher",
+  "file": "mods/caps-ime-switcher.wh.cpp",
+  "author": "ZeonXr",
+  "upstream": "https://github.com/ZeonXr",
+  "name_en": "Caps IME Switcher",
+  "name_zh": "Caps 输入法切换器",
+  "desc_zh": "把 macOS 上用 Caps Lock 切换输入源的习惯带到 Windows",
+  "in_m417z_set": false,
+  "installed": false
+ },
+ {
+  "mod_id": "chinese-ime-fixed-mode",
+  "file": "mods/chinese-ime-fixed-mode.wh.cpp",
+  "author": "barry",
+  "upstream": "https://github.com/barrypp",
+  "name_en": "Chinese IME fixed mode",
+  "name_zh": "中文输入法固定模式",
+  "desc_zh": "强制微软拼音输入法保持中文模式",
+  "in_m417z_set": false,
   "installed": false
  },
  {
@@ -19,6 +52,17 @@
   "name_zh": "用滚轮切换 Chrome/Edge 标签页",
   "desc_zh": "鼠标悬停在标签栏上时，滚动滚轮即可在 Chrome/Edge 的标签页之间切换",
   "in_m417z_set": true,
+  "installed": false
+ },
+ {
+  "mod_id": "close-explorer-on-esc",
+  "file": "mods/close-explorer-on-esc.wh.cpp",
+  "author": "lieyanbang",
+  "upstream": "https://github.com/lieyanbang",
+  "name_en": "Close Explorer on Esc",
+  "name_zh": "按 Esc 关闭资源管理器",
+  "desc_zh": "在资源管理器中按 Esc 关闭窗口；重命名和输入框内不生效",
+  "in_m417z_set": false,
   "installed": false
  },
  {
@@ -85,6 +129,17 @@
   "name_zh": "Windows 11 经典右键菜单",
   "desc_zh": "始终显示经典完整右键菜单，无需点击“显示更多选项”或按住 Shift",
   "in_m417z_set": true,
+  "installed": false
+ },
+ {
+  "mod_id": "explorer-ctrln-newfile",
+  "file": "mods/explorer-ctrln-newfile.wh.cpp",
+  "author": "lieyanbang",
+  "upstream": "https://github.com/lieyanbang",
+  "name_en": "Explorer Ctrl+N to New File",
+  "name_zh": "用 ctrl+n 创建新文件",
+  "desc_zh": "在资源管理器中用 Ctrl+N 在当前文件夹或标签页里新建文件",
+  "in_m417z_set": false,
   "installed": false
  },
  {
@@ -187,6 +242,17 @@
   "installed": false
  },
  {
+  "mod_id": "ime-mode-lock",
+  "file": "mods/ime-mode-lock.wh.cpp",
+  "author": "ZeonXr",
+  "upstream": "https://github.com/ZeonXr",
+  "name_en": "IME Native Mode Lock",
+  "name_zh": "输入法原生模式锁定",
+  "desc_zh": "强制受支持的输入法保持其原生输入模式，避免误切换",
+  "in_m417z_set": false,
+  "installed": false
+ },
+ {
   "mod_id": "keyboard-shortcut-actions",
   "file": "mods/keyboard-shortcut-actions.wh.cpp",
   "author": "m417z",
@@ -216,6 +282,17 @@
   "name_en": "More space in language indicator",
   "name_zh": "语言指示器更多空间",
   "desc_zh": "在任务栏使用小图标时，让语言指示器能够显示两行文字（Windows 10）",
+  "in_m417z_set": false,
+  "installed": false
+ },
+ {
+  "mod_id": "mouse-trail",
+  "file": "mods/mouse-trail.wh.cpp",
+  "author": "MCheng404",
+  "upstream": "https://github.com/MCheng404",
+  "name_en": "Mouse Trail",
+  "name_zh": "鼠标拖尾",
+  "desc_zh": "可定制鼠标拖尾：D3D11 渲染，23 颜色模式，10 拖尾样式，9 粒子形状，牛顿物理，向心力漩涡，音乐响应，2.5D，点击特效，DirectComposition 硬件加速，闲置低 CPU。",
   "in_m417z_set": false,
   "installed": false
  },
@@ -250,6 +327,17 @@
   "name_zh": "自定义 Windows 通知位置",
   "desc_zh": "可将系统通知移动到其他显示器，或移动到屏幕的其他角落，方便集中查看",
   "in_m417z_set": true,
+  "installed": false
+ },
+ {
+  "mod_id": "office-fix-account-disp-name",
+  "file": "mods/office-fix-account-disp-name.wh.cpp",
+  "author": "Joe Ye",
+  "upstream": "https://github.com/JoeYe-233",
+  "name_en": "Office Fix Account Display Name",
+  "name_zh": "Office 修复右上角账户名显示",
+  "desc_zh": "彻底修复 Office 软件右上角账户名中英倒置以及强行插入空格的问题，支持自定义名称",
+  "in_m417z_set": false,
   "installed": false
  },
  {
@@ -385,6 +473,17 @@
   "installed": false
  },
  {
+  "mod_id": "taskbar-autohide-better",
+  "file": "mods/taskbar-autohide-better.wh.cpp",
+  "author": "Cirn09",
+  "upstream": "https://github.com/Cirn09",
+  "name_en": "Better Taskbar Autohide",
+  "name_zh": "更好的任务栏自动隐藏",
+  "desc_zh": "非活动窗口有通知时，任务栏仍然可以自动隐藏",
+  "in_m417z_set": false,
+  "installed": false
+ },
+ {
   "mod_id": "taskbar-background-helper",
   "file": "mods/taskbar-background-helper.wh.cpp",
   "author": "m417z",
@@ -393,6 +492,17 @@
   "name_zh": "任务栏背景助手",
   "desc_zh": "为任务栏的透明区域设置背景，可始终生效或仅在窗口最大化时生效，需搭配 Windows 11 任务栏样式器使用",
   "in_m417z_set": true,
+  "installed": false
+ },
+ {
+  "mod_id": "taskbar-brightness-and-opacity-tuner",
+  "file": "mods/taskbar-brightness-and-opacity-tuner.wh.cpp",
+  "author": "lzxujun",
+  "upstream": "https://github.com/lzxujun",
+  "name_en": "Taskbar brightness and opacity tuner",
+  "name_zh": "任务栏亮度和透明度调节器",
+  "desc_zh": "分别调整任务栏背景与图标文字的不透明度，并可调暗任务栏背景，定制出简洁漂亮的任务栏，也更护眼、更适合 OLED 显示器",
+  "in_m417z_set": false,
   "installed": false
  },
  {
@@ -459,6 +569,17 @@
   "name_zh": "任务栏无响应窗口乱序修复",
   "desc_zh": "修复任务栏的一个缺陷：无响应窗口的任务栏项目会被移动到任务栏末尾",
   "in_m417z_set": true,
+  "installed": false
+ },
+ {
+  "mod_id": "taskbar-icon-group-centering",
+  "file": "mods/taskbar-icon-group-centering.wh.cpp",
+  "author": "Suioio",
+  "upstream": "https://github.com/Suioio",
+  "name_en": "Taskbar Icon Group Centering",
+  "name_zh": "任务栏图标组居中",
+  "desc_zh": "把任务栏中指定位置之后的图标作为一组相对整条任务栏居中。需要把任务栏对齐方式设为左对齐。",
+  "in_m417z_set": false,
   "installed": false
  },
  {
@@ -770,6 +891,17 @@
   "installed": false
  },
  {
+  "mod_id": "visio-pan-zoom",
+  "file": "mods/visio-pan-zoom.wh.cpp",
+  "author": "Joe Ye",
+  "upstream": "https://github.com/JoeYe-233",
+  "name_en": "Visio: Middle Mouse Pan & Smart Zoom",
+  "name_zh": "Visio 中键平移与智能缩放",
+  "desc_zh": "为 Visio 带来现代化的导航体验：中键拖拽平移，滚轮直接缩放，完美兼容触摸板。",
+  "in_m417z_set": false,
+  "installed": false
+ },
+ {
   "mod_id": "visual-studio-anti-rich-header",
   "file": "mods/visual-studio-anti-rich-header.wh.cpp",
   "author": "m417z",
@@ -811,6 +943,28 @@
   "name_zh": "VSCode 调整器",
   "desc_zh": "通过注入自定义 JavaScript 和 CSS 代码来调整 Microsoft Visual Studio Code",
   "in_m417z_set": true,
+  "installed": false
+ },
+ {
+  "mod_id": "win-d-per-monitor",
+  "file": "mods/win-d-per-monitor.wh.cpp",
+  "author": "easyatm",
+  "upstream": "https://github.com/easyatm",
+  "name_en": "Win+D per monitor(show desktop)",
+  "name_zh": "Win+D 仅作用于当前显示器（显示桌面）",
+  "desc_zh": "按下Win+D时 只最小化/还原鼠标所在显示器的窗口",
+  "in_m417z_set": false,
+  "installed": false
+ },
+ {
+  "mod_id": "win11-power-buttons",
+  "file": "mods/win11-power-buttons.wh.cpp",
+  "author": "Hakuuyosei",
+  "upstream": "https://github.com/ahzvenol",
+  "name_en": "Windows 11 Start Menu Power Buttons",
+  "name_zh": "Windows 11 开始菜单一键电源按钮",
+  "desc_zh": "添加可配置的一键关机/重启/注销/睡眠/休眠/锁定按钮到 Windows 11 开始菜单，替换默认的电源按钮二级菜单。",
+  "in_m417z_set": false,
   "installed": false
  },
  {

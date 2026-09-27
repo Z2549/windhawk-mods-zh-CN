@@ -4,7 +4,7 @@
 // @name:zh-CN      Windows 11 垂直任务栏
 // @description     Finally, the missing vertical taskbar option for Windows 11! Move the taskbar to the left or right side of the screen.
 // @description:zh-CN 终于补上了 Windows 11 缺失的垂直任务栏选项，可将任务栏移动到屏幕左侧或右侧
-// @version         1.3.13
+// @version         1.3.14
 // @author          m417z
 // @github          https://github.com/m417z
 // @twitter         https://twitter.com/m417z
@@ -99,7 +99,8 @@
   $name:zh-CN: 跳转列表垂直对齐方式
   $description: >-
     The vertical alignment of jump lists when right-clicking on taskbar items.
-  $description:zh-CN: 右键单击任务栏项目时跳转列表的垂直对齐方式。
+  $description:zh-CN: >-
+    右键单击任务栏项目时跳转列表的垂直对齐方式。
   $options:
   - top: Top
   - center: Center
@@ -128,14 +129,16 @@
     of the screen. This option doesn't work with the redesigned Start menu, and
     might not work with the Phone Link sidebar and with some Start Menu Styler
     themes.
-  $description:zh-CN: 调整开始菜单的打开动画，使其与任务栏的垂直位置相匹配，例如任务栏位于屏幕左侧时从左边滑入。此选项对重新设计的开始菜单无效，并且可能对“手机连接”侧边栏以及某些开始菜单样式器主题无效。
+  $description:zh-CN: >-
+    调整开始菜单的打开动画，使其与任务栏的垂直位置相匹配，例如任务栏位于屏幕左侧时从左边滑入。此选项对重新设计的开始菜单无效，并且可能对“手机连接”侧边栏以及某些开始菜单样式器主题无效。
 - clockContainerHeight: 0
   $name: Clock container height
   $name:zh-CN: 时钟容器高度
   $description: >-
     Set to zero to use the default height value, setting a custom height can be
     useful for a customized clock with a non-standard size.
-  $description:zh-CN: 设为 0 则使用默认高度值；对于尺寸非标准的自定义时钟，设置自定义高度会很有用。
+  $description:zh-CN: >-
+    设为 0 则使用默认高度值；对于尺寸非标准的自定义时钟，设置自定义高度会很有用。
 */
 // ==/WindhawkModSettings==
 
@@ -2337,9 +2340,19 @@ void UpdateTaskListButton(FrameworkElement taskListButtonElement) {
 
         double iconWidth = iconElement.ActualWidth();
 
+        // TaskListLabeledButtonPanel arranges the label to the right of the
+        // icon column regardless of Grid.Column, so shift it back by the icon
+        // column width. A plain Grid arranges it in the icon column cell, where
+        // symmetric margins keep it centered.
+        double labelShift = 0;
+        if (winrt::get_class_name(iconPanelElement) ==
+            L"Taskbar.TaskListLabeledButtonPanel") {
+            labelShift = iconWidth + 16;
+        }
+
         Thickness margin{};
         if (!g_unloading) {
-            margin.Left = -iconWidth - 16 - g_settings.taskbarWidth / 2.0;
+            margin.Left = -labelShift - g_settings.taskbarWidth / 2.0;
             margin.Top = 0;
             margin.Right = -g_settings.taskbarWidth / 2.0;
             margin.Bottom = iconWidth + 20;

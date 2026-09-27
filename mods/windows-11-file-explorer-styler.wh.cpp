@@ -4,14 +4,14 @@
 // @name:zh-CN      Windows 11 文件资源管理器样式器
 // @description     Customize the File Explorer with themes contributed by others or create your own
 // @description:zh-CN 使用他人贡献的主题或自制主题，自定义 Windows 11 文件资源管理器的外观
-// @version         1.6
+// @version         1.7
 // @author          m417z
 // @github          https://github.com/m417z
 // @twitter         https://twitter.com/m417z
 // @homepage        https://m417z.com/
 // @include         explorer.exe
 // @architecture    x86-64
-// @compilerOptions -lcomctl32 -ldwmapi -lole32 -loleaut32 -lruntimeobject -lshlwapi
+// @compilerOptions -lcomctl32 -ld2d1 -ldwmapi -lgdi32 -lmsimg32 -lole32 -loleaut32 -lruntimeobject -lshlwapi -luxtheme
 // ==/WindhawkMod==
 
 // Source code is published under The GNU General Public License v3.0.
@@ -299,6 +299,9 @@ VisualTreeWatcher 的实现基于 **TranslucentTB** 项目中的
 
 `WindhawkBlur` 画刷对象的实现基于 **TranslucentTB** 项目中的
 [XamlBlurBrush](https://github.com/TranslucentTB/TranslucentTB/blob/release/ExplorerTAP/XamlBlurBrush.cpp)。
+
+带 alpha 的 GDI 渲染，以及整个窗口半透明效果所用的强调色模糊背景（accent blur behind）
+设置，基于 [Translucent Windows](https://windhawk.net/mods/translucent-windows) mod。
 */
 // ==/WindhawkModReadme==
 
@@ -311,7 +314,8 @@ VisualTreeWatcher 的实现基于 **TranslucentTB** 项目中的
     Themes are collections of styles. For details about the themes below, or for
     information about submitting your own theme, refer to the relevant section
     in the mod details.
-  $description:zh-CN: 主题是样式的集合。关于下列主题的详情，或提交自己主题的相关信息，请参阅该 mod 说明中的相应章节。
+  $description:zh-CN: >-
+    主题是样式的集合。关于下列主题的详情，或提交自己主题的相关信息，请参阅该 mod 说明中的相应章节。
   $options:
   - "": None
   - Translucent Explorer11: Translucent Explorer11
@@ -354,10 +358,12 @@ VisualTreeWatcher 的实现基于 **TranslucentTB** 项目中的
   $description: >-
     The translucent effect to use for the File Explorer background. For
     additional translucent effects, check out the Translucent Windows mod.
-  $description:zh-CN: 用于文件资源管理器背景的半透明效果。如需更多半透明效果，请查看 Translucent Windows mod。
+  $description:zh-CN: >-
+    用于文件资源管理器背景的半透明效果。如需更多半透明效果，请查看 Translucent Windows mod。
   $options:
   - "": Default for the selected theme
   - default: Windows default
+  - acrylicblur: Blur (AccentBlurBehind)
   - acrylic: Acrylic
   - mica: Mica
   - micaAlt: Mica Alt
@@ -365,6 +371,7 @@ VisualTreeWatcher 的实现基于 **TranslucentTB** 项目中的
   $options:zh-CN:
   - "": 所选主题的默认值
   - default: Windows 默认
+  - acrylicblur: 模糊 (AccentBlurBehind)
   - acrylic: 亚克力
   - mica: Mica
   - micaAlt: Mica Alt
@@ -373,15 +380,15 @@ VisualTreeWatcher 的实现基于 **TranslucentTB** 项目中的
   $name: Translucent background effect region
   $name:zh-CN: 半透明背景效果区域
   $description: >-
-    The region where the translucent background effect is applied. Note that
-    applying the effect to the entire window is only supported in dark mode.
-  $description:zh-CN: 应用半透明背景效果的区域。请注意，将效果应用到整个窗口仅在深色模式下受支持。
+    The region where the translucent background effect is applied.
+  $description:zh-CN: >-
+    应用半透明背景效果的区域。
   $options:
-  - "": File Explorer frame only
-  - entireWindow: Entire window
+  - "": Entire window
+  - explorerFrame: File Explorer frame only
   $options:zh-CN:
-  - "": 仅文件资源管理器框架
-  - entireWindow: 整个窗口
+  - "": 整个窗口
+  - explorerFrame: 仅文件资源管理器框架
 - styleConstants: [""]
   $name: Style constants
   $name:zh-CN: 样式常量
@@ -389,7 +396,8 @@ VisualTreeWatcher 的实现基于 **TranslucentTB** 项目中的
     Some themes support style constants for customization, such as colors. Refer
     to the theme page for available constants. For technical details, refer to
     the mod description.
-  $description:zh-CN: 某些主题支持用于自定义（例如颜色）的样式常量。可用常量请参阅相应主题页面。技术细节请参阅该 mod 的说明。
+  $description:zh-CN: >-
+    某些主题支持用于自定义（例如颜色）的样式常量。可用常量请参阅相应主题页面。技术细节请参阅该 mod 的说明。
 - controlStyles:
   - - target: ""
       $name: Target
@@ -422,7 +430,8 @@ VisualTreeWatcher 的实现基于 **TranslucentTB** 项目中的
   $description: >-
     The height of the explorer frame container which includes the tabs, the
     address bar, and the command bar, set to zero to use the default height.
-  $description:zh-CN: 资源管理器框架容器的高度，该容器包含标签页、地址栏和命令栏；设为 0 则使用默认高度。
+  $description:zh-CN: >-
+    资源管理器框架容器的高度，该容器包含标签页、地址栏和命令栏；设为 0 则使用默认高度。
 - xamlDiagnosticsHandling: alert
   $name: XAML diagnostics consumer handling
   $name:zh-CN: XAML 诊断消费者处理
@@ -431,7 +440,8 @@ VisualTreeWatcher 的实现基于 **TranslucentTB** 项目中的
     diagnostics. There can only be one consumer at a time. Block will prevent
     other programs from using it, which might break them. Allow will let them
     use it, which might break this mod.
-  $description:zh-CN: 如何处理尝试使用 XAML 诊断的其他程序（例如 ExplorerBlurMica）。同一时间只能有一个消费者。阻止会禁止其他程序使用它，这可能会破坏这些程序。允许会让它们使用它，这可能会破坏该 mod。
+  $description:zh-CN: >-
+    如何处理尝试使用 XAML 诊断的其他程序（例如 ExplorerBlurMica）。同一时间只能有一个消费者。阻止会禁止其他程序使用它，这可能会破坏这些程序。允许会让它们使用它，这可能会破坏该 mod。
   $options:
   - alert: Alert (prompt before blocking)
   - block: Block other consumers
@@ -460,6 +470,7 @@ struct ThemeTargetStyles {
 
 enum class BackgroundTranslucentEffect {
     kDefault,
+    kBlur,
     kAcrylic,
     kMica,
     kMicaAlt,
@@ -1061,6 +1072,16 @@ const Theme g_themeMicaTabless = {{
         L"Background=Transparent"}},
     ThemeTargetStyles{L"Microsoft.UI.Xaml.Controls.Grid#DetailsViewControlRootGrid", {
         L"Background=Transparent"}},
+    ThemeTargetStyles{L"Microsoft.UI.Xaml.Controls.AppBarSeparator", {
+        L"Opacity=0"}},
+    ThemeTargetStyles{L"Microsoft.UI.Xaml.Controls.Grid#GalleryRootGrid", {
+        L"Background:="}},
+    ThemeTargetStyles{L"FileExplorerExtensions.GalleryViewControl#GalleryViewControl > Microsoft.UI.Xaml.Controls.Grid", {
+        L"Background:="}},
+    ThemeTargetStyles{L"Microsoft.UI.Xaml.Controls.Grid#HomeViewRootGrid", {
+        L"Background:="}},
+    ThemeTargetStyles{L"Microsoft.UI.Xaml.Controls.StackPanel#DetailsViewThumbnail > Microsoft.UI.Xaml.Controls.Grid", {
+        L"Background:="}},
 }, {
     L"NavigationBarGrid=1",
     L"CommandBarGrid=2",
@@ -1700,8 +1721,8 @@ const Theme g_themeFloat = {{
 // clang-format on
 
 enum class BackgroundTranslucentEffectRegion {
-    kExplorerFrame,
     kEntireWindow,
+    kExplorerFrame,
 };
 
 enum class XamlDiagnosticsHandling {
@@ -2048,7 +2069,10 @@ HRESULT VisualTreeWatcher::OnElementStateChanged(InstanceHandle, VisualElementSt
 
 #include <ocidl.h>
 
-winrt::com_ptr<VisualTreeWatcher> g_visualTreeWatcher;
+// Read by the UI threads while the thread which injects or uninitializes the TAP
+// replaces it.
+[[clang::no_destroy]] winrt::com_ptr<VisualTreeWatcher> g_visualTreeWatcher;
+SRWLOCK g_visualTreeWatcherLock = SRWLOCK_INIT;
 
 // {C85D8CC7-5463-40E8-A432-F5916B6427E5}
 static constexpr CLSID CLSID_WindhawkTAP = { 0xc85d8cc7, 0x5463, 0x40e8, { 0xa4, 0x32, 0xf5, 0x91, 0x6b, 0x64, 0x27, 0xe5 } };
@@ -2067,13 +2091,30 @@ private:
 
 #pragma region tap_cpp
 
+winrt::com_ptr<VisualTreeWatcher> GetVisualTreeWatcher()
+{
+    AcquireSRWLockShared(&g_visualTreeWatcherLock);
+    auto watcher = g_visualTreeWatcher;
+    ReleaseSRWLockShared(&g_visualTreeWatcherLock);
+    return watcher;
+}
+
+// Hands the previous watcher back to be unadvised and released outside the
+// lock: both can wait on the UI threads, which take it.
+winrt::com_ptr<VisualTreeWatcher> ExchangeVisualTreeWatcher(winrt::com_ptr<VisualTreeWatcher> watcher)
+{
+    AcquireSRWLockExclusive(&g_visualTreeWatcherLock);
+    std::swap(g_visualTreeWatcher, watcher);
+    ReleaseSRWLockExclusive(&g_visualTreeWatcherLock);
+    return watcher;
+}
+
 HRESULT WindhawkTAP::SetSite(IUnknown *pUnkSite) try
 {
     // Only ever 1 VTW at once.
-    if (g_visualTreeWatcher)
+    if (auto previous = ExchangeVisualTreeWatcher(nullptr))
     {
-        g_visualTreeWatcher->UnadviseVisualTreeChange();
-        g_visualTreeWatcher = nullptr;
+        previous->UnadviseVisualTreeChange();
     }
 
     site.copy_from(pUnkSite);
@@ -2083,7 +2124,7 @@ HRESULT WindhawkTAP::SetSite(IUnknown *pUnkSite) try
         // Decrease refcount increased by InitializeXamlDiagnosticsEx.
         FreeLibrary(GetCurrentModuleHandle());
 
-        g_visualTreeWatcher = winrt::make_self<VisualTreeWatcher>(site);
+        ExchangeVisualTreeWatcher(winrt::make_self<VisualTreeWatcher>(site));
     }
 
     return S_OK;
@@ -2274,6 +2315,8 @@ using namespace std::string_view_literals;
 #include <dwmapi.h>
 #include <roapi.h>
 #include <shlwapi.h>
+#include <uxtheme.h>
+#include <vssym32.h>
 #include <windows.graphics.effects.h>
 #include <winstring.h>
 
@@ -5175,12 +5218,12 @@ std::shared_ptr<void> TrackImageRetryCallback() {
     // for, and it runs whether the shared_ptr is destroyed or its construction
     // throws.
     return std::shared_ptr<void>(&g_imageRetryPendingCallbacks, [](void*) {
-        {
-            std::lock_guard<std::mutex> lock(g_imageRetryMutex);
+        std::lock_guard<std::mutex> lock(g_imageRetryMutex);
 
-            g_imageRetryPendingCallbacks--;
-        }
+        g_imageRetryPendingCallbacks--;
 
+        // Under the lock, since the module can be freed as soon as the waiter
+        // sees the count drop.
         g_imageRetryPendingCallbacksCv.notify_all();
     });
 }
@@ -5234,13 +5277,6 @@ void OnNetworkStatusChanged(
     winrt::Windows::Foundation::IInspectable const& sender) {
     Wh_Log(L">");
 
-    // Removing the handler doesn't wait for an invocation which is already in
-    // flight, so this one counts itself instead.
-    auto callbackRef = TrackImageRetryCallback();
-    if (!callbackRef) {
-        return;
-    }
-
     // Runs on a Windows Runtime thread pool thread, where the connectivity
     // query is allowed and doesn't hold up a UI thread.
     ScheduleImageLoadRetryOnAllUiThreads();
@@ -5248,9 +5284,22 @@ void OnNetworkStatusChanged(
 
 // Must not be called with g_imageRetryMutex held.
 winrt::event_token RegisterNetworkStatusChangedHandler() {
+    // Removing the handler doesn't wait for an invocation which is already in
+    // flight, and the event source releases the handler, which is mod code,
+    // only after that invocation. The handler holds the reference so that it
+    // covers both.
+    auto callbackRef = TrackImageRetryCallback();
+    if (!callbackRef) {
+        return {};
+    }
+
     try {
         auto token = winrt::Windows::Networking::Connectivity::
-            NetworkInformation::NetworkStatusChanged(OnNetworkStatusChanged);
+            NetworkInformation::NetworkStatusChanged(
+                [callbackRef](
+                    winrt::Windows::Foundation::IInspectable const& sender) {
+                    OnNetworkStatusChanged(sender);
+                });
         Wh_Log(L"Registered global network status change handler");
         return token;
     } catch (winrt::hresult_error const& ex) {
@@ -5297,6 +5346,8 @@ void StopImageLoadRetries() {
     // are already on their way into it are let through first. What they wait on
     // is a connectivity query and a dispatcher pass of a UI thread, and the
     // uninitialization which follows depends on those threads running anyway.
+    // A callback still returns through mod code after dropping its reference,
+    // which the rest of the uninitialization is left to outlast.
     std::unique_lock<std::mutex> lock(g_imageRetryMutex);
     g_imageRetryPendingCallbacksCv.wait(
         lock, [] { return g_imageRetryPendingCallbacks == 0; });
@@ -8336,8 +8387,15 @@ thread_local std::unordered_set<ElementId> g_recycledElements;
 // Re-matching there sets dependency properties from inside the pass, which
 // dirties layout and schedules another one, and layout never settles: XAML
 // gives up after enough passes and fails the process with a layout cycle.
-thread_local std::unordered_map<ElementId, winrt::weak_ref<wf::IInspectable>>
-    g_elementMatchedItems;
+//
+// A boxed value is recorded by value, since a source can box it anew on every
+// read. Anything else is recorded by a weak reference, so that a destroyed item
+// can't be mistaken for a successor at the same address, which would leave an
+// element wearing the styles matched for its predecessor.
+using RepeaterItem =
+    std::variant<winrt::weak_ref<wf::IInspectable>, UnboxedPropertyValue>;
+
+thread_local std::unordered_map<ElementId, RepeaterItem> g_elementMatchedItems;
 
 struct VirtualizingRepeaterState {
     muxc::ItemsRepeater::ElementClearing_revoker elementClearingRevoker;
@@ -8408,24 +8466,43 @@ void ReapplyCustomizationsForSubtree(FrameworkElement element) {
     }
 }
 
-// A weak reference to the item a repeater realized an element for, empty when
-// there is no such item or it supports no weak reference. Weak so that a
-// destroyed item can't be mistaken for a successor at the same address, which
-// would leave an element wearing the styles matched for its predecessor.
-winrt::weak_ref<wf::IInspectable> RepeaterItemAt(
-    muxc::ItemsRepeater const& repeater,
-    int index) {
+// The item a repeater realized an element for, nullopt when there is no such
+// item or it is neither a boxed value nor supports a weak reference.
+std::optional<RepeaterItem> RepeaterItemAt(muxc::ItemsRepeater const& repeater,
+                                           int index) {
     try {
         auto itemsSourceView = repeater.ItemsSourceView();
         if (!itemsSourceView || index < 0 || index >= itemsSourceView.Count()) {
-            return nullptr;
+            return std::nullopt;
         }
 
-        return TryMakeWeak(itemsSourceView.GetAt(index));
+        auto item = itemsSourceView.GetAt(index);
+        if (auto value = TryUnboxPropertyValue(item)) {
+            return RepeaterItem{std::move(*value)};
+        }
+
+        if (auto weakItem = TryMakeWeak(item)) {
+            return RepeaterItem{std::move(weakItem)};
+        }
+
+        return std::nullopt;
     } catch (winrt::hresult_error const& ex) {
         Wh_Log(L"Error %08X: %s", ex.code(), ex.message().c_str());
-        return nullptr;
+        return std::nullopt;
     }
+}
+
+// Never true for a destroyed item.
+bool SameRepeaterItem(RepeaterItem const& a, RepeaterItem const& b) {
+    using WeakItem = winrt::weak_ref<wf::IInspectable>;
+    if (auto* weakA = std::get_if<WeakItem>(&a)) {
+        auto* weakB = std::get_if<WeakItem>(&b);
+        auto strongA = weakA->get();
+        return weakB && strongA && strongA == weakB->get();
+    }
+
+    auto* valueB = std::get_if<UnboxedPropertyValue>(&b);
+    return valueB && std::get<UnboxedPropertyValue>(a) == *valueB;
 }
 
 // A virtualizing container recycles its item elements instead of destroying
@@ -8483,24 +8560,34 @@ void HandleVirtualizingRepeater(ElementId elementId, FrameworkElement element) {
             auto item = RepeaterItemAt(sender, args.Index());
 
             // Held across the walk below, so that an item which no weak
-            // reference can get back, such as one a source boxes anew on every
+            // reference can get back, such as one a source wraps anew on every
             // read, is never recorded: an entry which could match nothing would
             // keep the element held for good.
-            auto strongItem = item.get();
+            wf::IInspectable strongItem;
+            if (item) {
+                if (auto* weakItem =
+                        std::get_if<winrt::weak_ref<wf::IInspectable>>(
+                            &*item)) {
+                    strongItem = weakItem->get();
+                    if (!strongItem) {
+                        item.reset();
+                    }
+                }
+            }
 
             if (!g_recycledElements.erase(elementId)) {
                 // Freshly created, so the styles its Add mutation applied are
                 // the ones for this item, and only the item is recorded.
-                if (strongItem) {
-                    g_elementMatchedItems[elementId] = std::move(item);
+                if (item) {
+                    g_elementMatchedItems[elementId] = std::move(*item);
                 }
                 return;
             }
 
-            if (strongItem) {
+            if (item) {
                 auto it = g_elementMatchedItems.find(elementId);
                 if (it != g_elementMatchedItems.end() &&
-                    it->second.get() == strongItem) {
+                    SameRepeaterItem(it->second, *item)) {
                     Wh_Log(L"Element reused for the same item: %llu",
                            static_cast<uint64_t>(elementId));
                     return;
@@ -8512,8 +8599,8 @@ void HandleVirtualizingRepeater(ElementId elementId, FrameworkElement element) {
             ReapplyCustomizationsForSubtree(element);
 
             // After the walk, which erases the entry as part of the teardown.
-            if (strongItem) {
-                g_elementMatchedItems[elementId] = std::move(item);
+            if (item) {
+                g_elementMatchedItems[elementId] = std::move(*item);
             }
         });
 }
@@ -8666,7 +8753,8 @@ void FlushDiagnosticsReleases() {
     auto pending = std::move(g_pendingDiagnosticsRelease);
     g_pendingDiagnosticsRelease.clear();
 
-    if (!g_visualTreeWatcher) {
+    auto visualTreeWatcher = GetVisualTreeWatcher();
+    if (!visualTreeWatcher) {
         return;
     }
 
@@ -8680,7 +8768,7 @@ void FlushDiagnosticsReleases() {
             continue;
         }
 
-        if (g_visualTreeWatcher->ReleaseDiagnosticsReference(handle)) {
+        if (visualTreeWatcher->ReleaseDiagnosticsReference(handle)) {
             ForgetElementId(handle);
         }
     }
@@ -9135,7 +9223,7 @@ std::wstring AdjustTypeName(std::wstring_view type) {
     static const std::vector<std::pair<std::wstring_view, std::wstring_view>>
         adjustments = {
             {L"muxc:", L"Microsoft.UI.Xaml.Controls."},
-        };
+    };
 
     for (const auto& adjustment : adjustments) {
         if (type.starts_with(adjustment.first)) {
@@ -9812,9 +9900,8 @@ void UninitializeForCurrentThread() {
 }
 
 void UninitializeSettingsAndTap() {
-    if (g_visualTreeWatcher) {
-        g_visualTreeWatcher->UnadviseVisualTreeChange();
-        g_visualTreeWatcher = nullptr;
+    if (auto watcher = ExchangeVisualTreeWatcher(nullptr)) {
+        watcher->UnadviseVisualTreeChange();
     }
 
     g_initialized = false;
@@ -9901,6 +9988,9 @@ HRESULT WINAPI DwmSetWindowAttribute_Hook(HWND hWnd,
     switch (backgroundTranslucentEffect) {
         case BackgroundTranslucentEffect::kDefault:
             return original();
+        case BackgroundTranslucentEffect::kBlur:
+            backdropType = DWMSBT_AUTO;
+            break;
         case BackgroundTranslucentEffect::kAcrylic:
             backdropType = DWMSBT_TRANSIENTWINDOW;
             break;
@@ -9947,6 +10037,1196 @@ HRESULT WINAPI DwmExtendFrameIntoClientArea_Hook(HWND hWnd,
     return DwmExtendFrameIntoClientArea_Original(hWnd, &margins);
 }
 
+// The File Explorer window hosted by the thread, set if it has the effect
+// extended to the entire window. DWM treats the client area as having an alpha
+// channel which GDI doesn't write, so text and some theme parts are rendered
+// here with explicit alpha. The rendering is based on the Translucent Windows
+// mod.
+thread_local HWND g_entireWindowEffectWndForThread;
+
+bool IsFileExplorerWindowPart(HWND hWnd) {
+    return GetTargetWindowType(GetAncestor(hWnd, GA_ROOT)) ==
+           TargetWindowType::FileExplorer;
+}
+
+struct DCWnd {
+    HWND hWnd;
+    bool fileExplorer;
+};
+
+// The windows being painted by the thread between BeginPaint and EndPaint,
+// innermost last. Painting can nest, e.g. with UpdateWindow on a child. Deeper
+// nesting than the array holds is attributed to the outer window.
+thread_local DCWnd g_paintingWndsForThread[8];
+thread_local size_t g_paintingWndCountForThread;
+
+// Memory DCs created by comctl32 for double buffering, with the window of the
+// DC they're compatible with. They're also drawn to outside of painting, e.g.
+// by the scroll bar fade animation.
+struct DoubleBufferDC {
+    HDC hdc;
+    DCWnd wnd;
+};
+thread_local DoubleBufferDC g_doubleBufferDCsForThread[8];
+thread_local size_t g_doubleBufferDCCountForThread;
+
+// Memory DCs have no window. They're attributed to the window of their double
+// buffer, or to the window being painted. Returns nullptr outside of painting.
+const DCWnd* GetMemoryDCWnd(HDC hdc) {
+    for (size_t i = 0; i < g_doubleBufferDCCountForThread; i++) {
+        if (g_doubleBufferDCsForThread[i].hdc == hdc) {
+            return &g_doubleBufferDCsForThread[i].wnd;
+        }
+    }
+
+    size_t count = g_paintingWndCountForThread;
+    return count ? &g_paintingWndsForThread[count - 1] : nullptr;
+}
+
+// Windows above it whose EndPaint was missed are removed as well.
+void PopPaintingWnd(HWND hWnd) {
+    for (size_t i = g_paintingWndCountForThread; i > 0; i--) {
+        if (g_paintingWndsForThread[i - 1].hWnd == hWnd) {
+            g_paintingWndCountForThread = i - 1;
+            return;
+        }
+    }
+}
+
+bool IsEntireWindowEffectDC(HDC hdc) {
+    if (!g_entireWindowEffectWndForThread) {
+        return false;
+    }
+
+    HWND hWnd = WindowFromDC(hdc);
+    if (hWnd) {
+        return IsFileExplorerWindowPart(hWnd);
+    }
+
+    // Memory DCs without a known window are skipped.
+    const DCWnd* memoryDCWnd = GetMemoryDCWnd(hdc);
+    return memoryDCWnd && memoryDCWnd->fileExplorer;
+}
+
+using BeginPaint_t = decltype(&BeginPaint);
+BeginPaint_t BeginPaint_Original;
+HDC WINAPI BeginPaint_Hook(HWND hWnd, LPPAINTSTRUCT lpPaint) {
+    // Pushed before the call to cover WM_ERASEBKGND, which BeginPaint sends.
+    bool pushed = false;
+    if (g_entireWindowEffectWndForThread &&
+        g_paintingWndCountForThread < ARRAYSIZE(g_paintingWndsForThread)) {
+        g_paintingWndsForThread[g_paintingWndCountForThread++] = {
+            hWnd, IsFileExplorerWindowPart(hWnd)};
+        pushed = true;
+    }
+
+    HDC hdc = BeginPaint_Original(hWnd, lpPaint);
+    if (!hdc && pushed) {
+        PopPaintingWnd(hWnd);
+    }
+
+    return hdc;
+}
+
+using EndPaint_t = decltype(&EndPaint);
+EndPaint_t EndPaint_Original;
+BOOL WINAPI EndPaint_Hook(HWND hWnd, const PAINTSTRUCT* lpPaint) {
+    PopPaintingWnd(hWnd);
+    return EndPaint_Original(hWnd, lpPaint);
+}
+
+// The content background is painted with the window color, which is white in
+// light mode. Fills of that color are replaced with transparent black.
+bool IsWindowBackgroundBrush(HDC hdc, HBRUSH hbr) {
+    if (hbr == (HBRUSH)(COLOR_WINDOW + 1)) {
+        return true;
+    }
+
+    COLORREF color;
+    if (hbr == GetStockObject(DC_BRUSH)) {
+        color = GetDCBrushColor(hdc);
+    } else {
+        LOGBRUSH logBrush;
+        if (GetObject(hbr, sizeof(logBrush), &logBrush) != sizeof(logBrush) ||
+            logBrush.lbStyle != BS_SOLID) {
+            return false;
+        }
+
+        color = logBrush.lbColor;
+    }
+
+    return color == GetSysColor(COLOR_WINDOW);
+}
+
+using FillRect_t = decltype(&FillRect);
+FillRect_t FillRect_Original;
+int WINAPI FillRect_Hook(HDC hDC, const RECT* lprc, HBRUSH hbr) {
+    if (IsEntireWindowEffectDC(hDC) && IsWindowBackgroundBrush(hDC, hbr)) {
+        hbr = (HBRUSH)GetStockObject(BLACK_BRUSH);
+    }
+
+    return FillRect_Original(hDC, lprc, hbr);
+}
+
+using PatBlt_t = decltype(&PatBlt);
+PatBlt_t PatBlt_Original;
+BOOL WINAPI PatBlt_Hook(HDC hdc, int x, int y, int w, int h, DWORD rop) {
+    if (rop == PATCOPY && IsEntireWindowEffectDC(hdc) &&
+        IsWindowBackgroundBrush(hdc,
+                                (HBRUSH)GetCurrentObject(hdc, OBJ_BRUSH))) {
+        HGDIOBJ prevBrush = SelectObject(hdc, GetStockObject(BLACK_BRUSH));
+        BOOL result = PatBlt_Original(hdc, x, y, w, h, rop);
+        SelectObject(hdc, prevBrush);
+        return result;
+    }
+
+    return PatBlt_Original(hdc, x, y, w, h, rop);
+}
+
+bool FillRectWithAlpha(HDC hdc, const RECT* rect, COLORREF color, BYTE alpha) {
+    BLENDFUNCTION blend = {AC_SRC_OVER, 0, 255, AC_SRC_ALPHA};
+    BP_PAINTPARAMS params = {sizeof(params)};
+    params.pBlendFunction = &blend;
+    HDC memDC;
+    HPAINTBUFFER hpb =
+        BeginBufferedPaint(hdc, rect, BPBF_TOPDOWNDIB, &params, &memDC);
+    if (!hpb) {
+        return false;
+    }
+
+    // The buffer is blended as premultiplied alpha.
+    HBRUSH brush = CreateSolidBrush(RGB(GetRValue(color) * alpha / 255,
+                                        GetGValue(color) * alpha / 255,
+                                        GetBValue(color) * alpha / 255));
+    FillRect_Original(memDC, rect, brush);
+    DeleteObject(brush);
+    BufferedPaintSetAlpha(hpb, rect, alpha);
+    EndBufferedPaint(hpb, TRUE);
+    return true;
+}
+
+HMODULE GetModuleFromAddress(void* address) {
+    HMODULE module;
+    if (!GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+                               GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                           (PCWSTR)address, &module)) {
+        return nullptr;
+    }
+
+    return module;
+}
+
+std::wstring GetModulePath(HMODULE module) {
+    if (!module) {
+        return L"<unknown>";
+    }
+
+    std::wstring path(MAX_PATH, L'\0');
+    while (true) {
+        DWORD len = GetModuleFileName(module, path.data(), path.size());
+        if (len == 0) {
+            return L"<unknown>";
+        }
+
+        // A result equal to the buffer size means the path was truncated.
+        if (len == path.size()) {
+            path.resize(len * 2);
+            continue;
+        }
+
+        path.resize(len);
+        return path;
+    }
+}
+
+// Whether the path is under the Windows directory.
+bool IsSystemModulePath(PCWSTR path) {
+    WCHAR windowsDir[MAX_PATH];
+    UINT len = GetSystemWindowsDirectory(windowsDir, ARRAYSIZE(windowsDir));
+    if (len == 0 || len >= ARRAYSIZE(windowsDir)) {
+        return false;
+    }
+
+    return _wcsnicmp(path, windowsDir, len) == 0 && path[len] == L'\\';
+}
+
+// Modules are matched by file name, since some, such as comctl32.dll, are
+// loaded in more than one version. Another hook on top of ours makes its hook
+// function the direct caller, so a few frames further up the stack are checked
+// as well. A hook isn't in a system module, so the search stops at the first
+// frame in one.
+[[clang::noinline]] bool IsHookCallerFromModule(void* retAddress,
+                                                PCWSTR moduleName,
+                                                bool logMismatches = true) {
+    auto isExpectedModule = [moduleName](const std::wstring& modulePath) {
+        return _wcsicmp(PathFindFileName(modulePath.c_str()), moduleName) == 0;
+    };
+
+    std::wstring callerPath = GetModulePath(GetModuleFromAddress(retAddress));
+    if (isExpectedModule(callerPath)) {
+        return true;
+    }
+
+    if (IsSystemModulePath(callerPath.c_str())) {
+        if (logMismatches) {
+            Wh_Log(L"Skipping caller %p in module %s, expected %s", retAddress,
+                   callerPath.c_str(), moduleName);
+        }
+        return false;
+    }
+
+    if (logMismatches) {
+        Wh_Log(L"Tracing caller %p in module %s, expected %s", retAddress,
+               callerPath.c_str(), moduleName);
+    }
+
+    // The backtrace skips the frames of this function, the hook, and the
+    // caller.
+    void* frames[4];
+    WORD count = CaptureStackBackTrace(3, ARRAYSIZE(frames), frames, nullptr);
+    for (WORD i = 0; i < count; i++) {
+        std::wstring modulePath =
+            GetModulePath(GetModuleFromAddress(frames[i]));
+        if (logMismatches) {
+            Wh_Log(L"Frame %u: %p in module %s", i + 1, frames[i],
+                   modulePath.c_str());
+        }
+        if (isExpectedModule(modulePath)) {
+            return true;
+        }
+
+        if (IsSystemModulePath(modulePath.c_str())) {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+using CreateCompatibleDC_t = decltype(&CreateCompatibleDC);
+CreateCompatibleDC_t CreateCompatibleDC_Original;
+HDC WINAPI CreateCompatibleDC_Hook(HDC hdc) {
+    HDC memDC = CreateCompatibleDC_Original(hdc);
+    if (!memDC || !hdc || !g_entireWindowEffectWndForThread ||
+        g_doubleBufferDCCountForThread >=
+            ARRAYSIZE(g_doubleBufferDCsForThread)) {
+        return memDC;
+    }
+
+    HWND hWnd = WindowFromDC(hdc);
+    if (!hWnd) {
+        return memDC;
+    }
+
+    // uxtheme reuses its buffered paint DCs for other targets, so only comctl32
+    // DCs, which are created for each use, are tracked.
+    if (!IsHookCallerFromModule(__builtin_return_address(0), L"comctl32.dll",
+                                /*logMismatches=*/false)) {
+        return memDC;
+    }
+
+    g_doubleBufferDCsForThread[g_doubleBufferDCCountForThread++] = {
+        memDC, {hWnd, IsFileExplorerWindowPart(hWnd)}};
+    return memDC;
+}
+
+using DeleteDC_t = decltype(&DeleteDC);
+DeleteDC_t DeleteDC_Original;
+BOOL WINAPI DeleteDC_Hook(HDC hdc) {
+    for (size_t i = 0; i < g_doubleBufferDCCountForThread; i++) {
+        if (g_doubleBufferDCsForThread[i].hdc == hdc) {
+            g_doubleBufferDCsForThread[i] =
+                g_doubleBufferDCsForThread[--g_doubleBufferDCCountForThread];
+            break;
+        }
+    }
+
+    return DeleteDC_Original(hdc);
+}
+
+// The navigation pane divider is a horizontal line drawn by ExplorerFrame.dll,
+// which is drawn translucent.
+using Polyline_t = decltype(&Polyline);
+Polyline_t Polyline_Original;
+BOOL WINAPI Polyline_Hook(HDC hdc, const POINT* apt, int cpt) {
+    if (cpt != 2 || apt[0].y != apt[1].y || !IsEntireWindowEffectDC(hdc)) {
+        return Polyline_Original(hdc, apt, cpt);
+    }
+
+    LOGPEN pen;
+    if (GetObject(GetCurrentObject(hdc, OBJ_PEN), sizeof(pen), &pen) !=
+            sizeof(pen) ||
+        pen.lopnStyle != PS_SOLID) {
+        return Polyline_Original(hdc, apt, cpt);
+    }
+
+    if (!IsHookCallerFromModule(__builtin_return_address(0),
+                                L"ExplorerFrame.dll")) {
+        return Polyline_Original(hdc, apt, cpt);
+    }
+
+    // A wide pen is centered on the line, and the last point isn't drawn.
+    int width = std::max(pen.lopnWidth.x, 1L);
+    int top = apt[0].y - width / 2;
+    RECT rect = {std::min(apt[0].x, apt[1].x), top,
+                 std::max(apt[0].x, apt[1].x), top + width};
+    if (!FillRectWithAlpha(hdc, &rect, pen.lopnColor, 96)) {
+        return Polyline_Original(hdc, apt, cpt);
+    }
+
+    return TRUE;
+}
+
+BYTE g_lightTextAlphaLut[256];
+BYTE g_darkTextAlphaLut[256];
+
+void InitTextAlphaLuts() {
+    for (int i = 0; i < 256; i++) {
+        // Inverse gamma from 1.2 for low to 1.5 for full coverage, brightens
+        // antialiased edges similarly to DrawTextWithGlow.
+        float a = i / 255.0f;
+        float gamma = 1.2f + 0.3f * a;
+        g_lightTextAlphaLut[i] = (BYTE)(powf(a, 1.0f / gamma) * 255.0f + 0.5f);
+
+        // Dark text is heavy with boosted edges. The max opacity matches the
+        // WinUI TextFillColorPrimary light theme color (#E4000000).
+        g_darkTextAlphaLut[i] = (BYTE)(i * 0xE4 / 255);
+    }
+}
+
+bool CalcExtTextOutRect(HDC hdc,
+                        int x,
+                        int y,
+                        UINT options,
+                        const RECT* lprect,
+                        LPCWSTR lpString,
+                        UINT c,
+                        const INT* lpDx,
+                        RECT* textRect) {
+    SIZE textSize;
+    BOOL res = (options & ETO_GLYPH_INDEX)
+                   ? GetTextExtentPointI(hdc, (WORD*)lpString, c, &textSize)
+                   : GetTextExtentPoint32(hdc, lpString, c, &textSize);
+    if (!res) {
+        return false;
+    }
+
+    if (lpDx) {
+        int dx = 0;
+        int dy = 0;
+        UINT stride = (options & ETO_PDY) ? 2 : 1;
+        for (UINT i = 0; i < c; i++) {
+            dx += lpDx[i * stride];
+            if (options & ETO_PDY) {
+                dy += lpDx[i * stride + 1];
+            }
+        }
+
+        textSize.cx = std::max(textSize.cx, (LONG)dx);
+        textSize.cy += abs(dy);
+    }
+
+    // TA_BASELINE and TA_CENTER are supersets of TA_BOTTOM and TA_RIGHT, so the
+    // fields are compared as a whole.
+    UINT align = GetTextAlign(hdc);
+    switch (align & (TA_BOTTOM | TA_BASELINE)) {
+        case TA_BASELINE: {
+            TEXTMETRIC tm;
+            if (GetTextMetrics(hdc, &tm)) {
+                y -= tm.tmAscent;
+            }
+            break;
+        }
+        case TA_BOTTOM:
+            y -= textSize.cy;
+            break;
+    }
+
+    switch (align & (TA_RIGHT | TA_CENTER)) {
+        case TA_CENTER:
+            x -= textSize.cx / 2;
+            break;
+        case TA_RIGHT:
+            x -= textSize.cx;
+            break;
+    }
+
+    SetRect(textRect, x, y, x + textSize.cx, y + textSize.cy);
+
+    if (lprect) {
+        if (options & ETO_CLIPPED) {
+            IntersectRect(textRect, textRect, lprect);
+        }
+        if (options & ETO_OPAQUE) {
+            UnionRect(textRect, textRect, lprect);
+        }
+    }
+
+    return !IsRectEmpty(textRect);
+}
+
+bool PaintExtTextOutBackground(HDC hdc, const RECT* lprect) {
+    COLORREF color = GetBkColor(hdc);
+
+    // The selection highlight is made opaque, other backgrounds are left for
+    // DWM to treat as with any other GDI fill.
+    if (color != GetSysColor(COLOR_HIGHLIGHT)) {
+        HBRUSH brush = CreateSolidBrush(color);
+        FillRect(hdc, lprect, brush);
+        DeleteObject(brush);
+        return true;
+    }
+
+    BP_PAINTPARAMS params = {sizeof(params)};
+    HDC memDC;
+    HPAINTBUFFER hpb =
+        BeginBufferedPaint(hdc, lprect, BPBF_TOPDOWNDIB, &params, &memDC);
+    if (!hpb) {
+        return false;
+    }
+
+    FillRect(memDC, lprect, GetSysColorBrush(COLOR_HIGHLIGHT));
+    BufferedPaintMakeOpaque(hpb, lprect);
+    EndBufferedPaint(hpb, TRUE);
+    return true;
+}
+
+using ExtTextOutW_t = decltype(&ExtTextOutW);
+ExtTextOutW_t ExtTextOutW_Original;
+
+BOOL ExtTextOutWithAlpha(HDC hdc,
+                         int x,
+                         int y,
+                         UINT options,
+                         const RECT* lprect,
+                         LPCWSTR lpString,
+                         UINT c,
+                         const INT* lpDx) {
+    auto original = [=]() {
+        return ExtTextOutW_Original(hdc, x, y, options, lprect, lpString, c,
+                                    lpDx);
+    };
+
+    if (!lpString || !c || !options || (GetTextAlign(hdc) & TA_UPDATECP)) {
+        return original();
+    }
+
+    if ((options & (ETO_OPAQUE | ETO_CLIPPED)) &&
+        (!lprect || IsRectEmpty(lprect))) {
+        return original();
+    }
+
+    RECT textRect;
+    if (!CalcExtTextOutRect(hdc, x, y, options, lprect, lpString, c, lpDx,
+                            &textRect)) {
+        return original();
+    }
+
+    if ((options & ETO_OPAQUE) && !PaintExtTextOutBackground(hdc, lprect)) {
+        return original();
+    }
+
+    BLENDFUNCTION blend = {AC_SRC_OVER, 0, 255, AC_SRC_ALPHA};
+    BP_PAINTPARAMS params = {sizeof(params)};
+    params.dwFlags = BPPF_ERASE | BPPF_NOCLIP;
+    params.pBlendFunction = &blend;
+    HDC memDC;
+    HPAINTBUFFER hpb =
+        BeginBufferedPaint(hdc, &textRect, BPBF_TOPDOWNDIB, &params, &memDC);
+    if (!hpb) {
+        return original();
+    }
+
+    // Draw a white coverage mask, then turn it into the text color with alpha.
+    HGDIOBJ prevFont = SelectObject(memDC, GetCurrentObject(hdc, OBJ_FONT));
+    SetTextAlign(memDC, GetTextAlign(hdc));
+    SetLayout(memDC, GetLayout(hdc));
+    SetBkMode(memDC, TRANSPARENT);
+    SetTextColor(memDC, RGB(255, 255, 255));
+
+    BOOL result = ExtTextOutW_Original(memDC, x, y, options & ~ETO_OPAQUE,
+                                       lprect, lpString, c, lpDx);
+
+    SelectObject(memDC, prevFont);
+
+    RGBQUAD* pixels;
+    int rowWidth;
+    if (FAILED(GetBufferedPaintBits(hpb, &pixels, &rowWidth))) {
+        EndBufferedPaint(hpb, FALSE);
+        return original();
+    }
+
+    COLORREF textColor = GetTextColor(hdc);
+    BYTE textRed = GetRValue(textColor);
+    BYTE textGreen = GetGValue(textColor);
+    BYTE textBlue = GetBValue(textColor);
+
+    bool darkText = textRed * 299 + textGreen * 587 + textBlue * 114 < 128000;
+    const BYTE* alphaLut = darkText ? g_darkTextAlphaLut : g_lightTextAlphaLut;
+
+    int width = textRect.right - textRect.left;
+    int height = textRect.bottom - textRect.top;
+    for (int row = 0; row < height; row++) {
+        RGBQUAD* rowPixels = pixels + row * rowWidth;
+        for (int col = 0; col < width; col++) {
+            RGBQUAD& px = rowPixels[col];
+            if (!(px.rgbBlue | px.rgbGreen | px.rgbRed)) {
+                continue;
+            }
+
+            BYTE luma = (px.rgbBlue + (px.rgbGreen << 1) + px.rgbRed) >> 2;
+            BYTE alpha = alphaLut[luma];
+            px.rgbBlue = (textBlue * alpha) >> 8;
+            px.rgbGreen = (textGreen * alpha) >> 8;
+            px.rgbRed = (textRed * alpha) >> 8;
+            px.rgbReserved = alpha;
+        }
+    }
+
+    EndBufferedPaint(hpb, TRUE);
+    return result;
+}
+
+BOOL WINAPI ExtTextOutW_Hook(HDC hdc,
+                             int x,
+                             int y,
+                             UINT options,
+                             const RECT* lprect,
+                             LPCWSTR lpString,
+                             UINT c,
+                             const INT* lpDx) {
+    if (!IsEntireWindowEffectDC(hdc)) {
+        return ExtTextOutW_Original(hdc, x, y, options, lprect, lpString, c,
+                                    lpDx);
+    }
+
+    bool windowBk =
+        (options & ETO_OPAQUE) && GetBkColor(hdc) == GetSysColor(COLOR_WINDOW);
+    COLORREF prevBkColor = windowBk ? SetBkColor(hdc, RGB(0, 0, 0)) : 0;
+    BOOL result =
+        ExtTextOutWithAlpha(hdc, x, y, options, lprect, lpString, c, lpDx);
+    if (windowBk) {
+        SetBkColor(hdc, prevBkColor);
+    }
+
+    return result;
+}
+
+using DrawTextWithGlow_t =
+    HRESULT(WINAPI*)(HDC hdcMem,
+                     LPWSTR pszText,
+                     UINT cch,
+                     RECT* pRect,
+                     DWORD dwFlags,
+                     COLORREF crText,
+                     COLORREF crGlow,
+                     UINT nGlowRadius,
+                     UINT nGlowIntensity,
+                     BOOL fPreMultiply,
+                     DTT_CALLBACK_PROC pfnDrawTextCallback,
+                     LPARAM lParam);
+DrawTextWithGlow_t DrawTextWithGlow_Original;
+HRESULT WINAPI DrawTextWithGlow_Hook(HDC hdcMem,
+                                     LPWSTR pszText,
+                                     UINT cch,
+                                     RECT* pRect,
+                                     DWORD dwFlags,
+                                     COLORREF crText,
+                                     COLORREF crGlow,
+                                     UINT nGlowRadius,
+                                     UINT nGlowIntensity,
+                                     BOOL fPreMultiply,
+                                     DTT_CALLBACK_PROC pfnDrawTextCallback,
+                                     LPARAM lParam) {
+    auto original = [=]() {
+        return DrawTextWithGlow_Original(
+            hdcMem, pszText, cch, pRect, dwFlags, crText, crGlow, nGlowRadius,
+            nGlowIntensity, fPreMultiply, pfnDrawTextCallback, lParam);
+    };
+
+    if (nGlowRadius > 0 || !IsEntireWindowEffectDC(hdcMem)) {
+        return original();
+    }
+
+    if ((pRect->right == pRect->left || pRect->bottom == pRect->top) &&
+        !(dwFlags & DT_CALCRECT)) {
+        return original();
+    }
+
+    // Draw plain text, the alpha is handled by the ExtTextOutW hook.
+    COLORREF prevTextColor = SetTextColor(hdcMem, crText);
+    COLORREF prevBkColor = SetBkColor(hdcMem, RGB(0, 0, 0));
+
+    HRESULT result;
+    if (pfnDrawTextCallback) {
+        result =
+            pfnDrawTextCallback(hdcMem, pszText, cch, pRect, dwFlags, lParam);
+    } else {
+        result =
+            DrawTextW(hdcMem, pszText, cch, pRect, dwFlags & ~DT_MODIFYSTRING)
+                ? S_OK
+                : E_FAIL;
+    }
+
+    SetTextColor(hdcMem, prevTextColor);
+    SetBkColor(hdcMem, prevBkColor);
+
+    return result;
+}
+
+struct ThemePartBitmaps {
+    HDC scrollBarThumb[4];
+    HDC headerItem[2];
+};
+
+// Theme part bitmaps are shared by the File Explorer threads, keyed by DPI.
+SRWLOCK g_themePartCacheLock = SRWLOCK_INIT;
+[[clang::no_destroy]] winrt::com_ptr<ID2D1Factory> g_d2dFactory;
+std::unordered_map<UINT, ThemePartBitmaps> g_themePartCache;
+
+void DeleteThemePartBitmap(HDC& hdc) {
+    if (hdc) {
+        HGDIOBJ bitmap = GetCurrentObject(hdc, OBJ_BITMAP);
+        DeleteDC(hdc);
+        DeleteObject(bitmap);
+        hdc = nullptr;
+    }
+}
+
+void ClearThemePartCache() {
+    AcquireSRWLockExclusive(&g_themePartCacheLock);
+
+    for (auto& [dpi, bitmaps] : g_themePartCache) {
+        for (HDC& hdc : bitmaps.scrollBarThumb) {
+            DeleteThemePartBitmap(hdc);
+        }
+
+        for (HDC& hdc : bitmaps.headerItem) {
+            DeleteThemePartBitmap(hdc);
+        }
+    }
+
+    g_themePartCache.clear();
+    g_d2dFactory = nullptr;
+
+    ReleaseSRWLockExclusive(&g_themePartCacheLock);
+}
+
+UINT GetThemePartDpi(HDC hdc) {
+    HWND hWnd = WindowFromDC(hdc);
+    if (!hWnd) {
+        const DCWnd* memoryDCWnd = GetMemoryDCWnd(hdc);
+        hWnd =
+            memoryDCWnd ? memoryDCWnd->hWnd : g_entireWindowEffectWndForThread;
+    }
+
+    UINT dpi = GetDpiForWindow(hWnd);
+    return dpi ? dpi : GetDpiForSystem();
+}
+
+D2D1_COLOR_F ThemePartColor(BYTE a, BYTE r, BYTE g, BYTE b) {
+    return D2D1::ColorF(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
+}
+
+winrt::com_ptr<ID2D1DCRenderTarget> CreateBoundRenderTarget(HDC hdc,
+                                                            const RECT* rect) {
+    if (!g_d2dFactory &&
+        FAILED(D2D1CreateFactory(D2D1_FACTORY_TYPE_MULTI_THREADED,
+                                 __uuidof(ID2D1Factory), nullptr,
+                                 g_d2dFactory.put_void()))) {
+        return nullptr;
+    }
+
+    D2D1_RENDER_TARGET_PROPERTIES props = D2D1::RenderTargetProperties(
+        D2D1_RENDER_TARGET_TYPE_SOFTWARE,
+        D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM,
+                          D2D1_ALPHA_MODE_PREMULTIPLIED),
+        0, 0, D2D1_RENDER_TARGET_USAGE_GDI_COMPATIBLE);
+
+    winrt::com_ptr<ID2D1DCRenderTarget> renderTarget;
+    if (FAILED(
+            g_d2dFactory->CreateDCRenderTarget(&props, renderTarget.put())) ||
+        FAILED(renderTarget->BindDC(hdc, rect))) {
+        return nullptr;
+    }
+
+    return renderTarget;
+}
+
+// Returns a memory DC with a 32-bit bitmap selected, painted by drawFunc.
+template <typename DrawFunc>
+HDC CreateThemePartBitmap(int width, int height, DrawFunc drawFunc) {
+    HDC hdc = CreateCompatibleDC(nullptr);
+    if (!hdc) {
+        return nullptr;
+    }
+
+    BITMAPINFO bmi = {};
+    bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bmi.bmiHeader.biWidth = width;
+    bmi.bmiHeader.biHeight = -height;
+    bmi.bmiHeader.biPlanes = 1;
+    bmi.bmiHeader.biBitCount = 32;
+    bmi.bmiHeader.biCompression = BI_RGB;
+
+    void* bits;
+    HBITMAP bitmap =
+        CreateDIBSection(hdc, &bmi, DIB_RGB_COLORS, &bits, nullptr, 0);
+    if (!bitmap) {
+        DeleteDC(hdc);
+        return nullptr;
+    }
+
+    SelectObject(hdc, bitmap);
+
+    RECT rect = {0, 0, width, height};
+    auto renderTarget = CreateBoundRenderTarget(hdc, &rect);
+    if (!renderTarget) {
+        DeleteThemePartBitmap(hdc);
+        return nullptr;
+    }
+
+    renderTarget->BeginDraw();
+    drawFunc(renderTarget.get());
+    if (FAILED(renderTarget->EndDraw())) {
+        DeleteThemePartBitmap(hdc);
+        return nullptr;
+    }
+
+    return hdc;
+}
+
+// Stretches the bitmap over the rect, keeping the margins unscaled.
+void AlphaBlendNineGrid(HDC hdc,
+                        const RECT* rect,
+                        HDC src,
+                        int left,
+                        int top,
+                        int right,
+                        int bottom) {
+    BITMAP bmp;
+    if (!GetObject(GetCurrentObject(src, OBJ_BITMAP), sizeof(bmp), &bmp)) {
+        return;
+    }
+
+    int width = rect->right - rect->left;
+    int height = rect->bottom - rect->top;
+    left = std::min(left, width);
+    right = std::min(right, width - left);
+    top = std::min(top, height);
+    bottom = std::min(bottom, height - top);
+
+    const int srcX[] = {0, left, bmp.bmWidth - right, (int)bmp.bmWidth};
+    const int srcY[] = {0, top, bmp.bmHeight - bottom, (int)bmp.bmHeight};
+    const int dstX[] = {rect->left, rect->left + left, rect->right - right,
+                        rect->right};
+    const int dstY[] = {rect->top, rect->top + top, rect->bottom - bottom,
+                        rect->bottom};
+
+    BLENDFUNCTION blend = {AC_SRC_OVER, 0, 255, AC_SRC_ALPHA};
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            int dstWidth = dstX[i + 1] - dstX[i];
+            int dstHeight = dstY[j + 1] - dstY[j];
+            int srcWidth = srcX[i + 1] - srcX[i];
+            int srcHeight = srcY[j + 1] - srcY[j];
+            if (dstWidth > 0 && dstHeight > 0 && srcWidth > 0 &&
+                srcHeight > 0) {
+                AlphaBlend(hdc, dstX[i], dstY[j], dstWidth, dstHeight, src,
+                           srcX[i], srcY[j], srcWidth, srcHeight, blend);
+            }
+        }
+    }
+}
+
+bool PaintScrollBarThumb(HDC hdc,
+                         int iPartId,
+                         int iStateId,
+                         LPCRECT pRect,
+                         UINT dpi) {
+    bool horizontal = iPartId == SBP_THUMBBTNHORZ;
+    bool normal = iStateId == SCRBS_NORMAL;
+    float scale = dpi / 96.0f;
+
+    HDC& cached = g_themePartCache[dpi]
+                      .scrollBarThumb[(horizontal ? 2 : 0) + (normal ? 0 : 1)];
+    if (!cached) {
+        int width = (horizontal ? 20 : 17) * scale;
+        int height = (horizontal ? 17 : 11) * scale;
+        cached = CreateThemePartBitmap(
+            width, height, [&](ID2D1RenderTarget* renderTarget) {
+                // The thumb gets wider when hovered.
+                float inset = normal ? 0.35f : 0.25f;
+                D2D1_RECT_F rect =
+                    horizontal ? D2D1::RectF(0, height * inset, width,
+                                             height - height * inset)
+                               : D2D1::RectF(width * inset, 0,
+                                             width - width * inset, height);
+                float radius = 4.0f * scale;
+
+                winrt::com_ptr<ID2D1SolidColorBrush> brush;
+                renderTarget->CreateSolidColorBrush(
+                    normal ? ThemePartColor(128, 160, 160, 160)
+                           : ThemePartColor(160, 224, 224, 224),
+                    brush.put());
+                if (brush) {
+                    renderTarget->FillRoundedRectangle(
+                        D2D1::RoundedRect(rect, radius, radius), brush.get());
+                }
+            });
+        if (!cached) {
+            return false;
+        }
+    }
+
+    FillRect(hdc, pRect, (HBRUSH)GetStockObject(BLACK_BRUSH));
+    AlphaBlendNineGrid(hdc, pRect, cached, 8 * scale, 5 * scale, 8 * scale,
+                       5 * scale);
+    return true;
+}
+
+bool PaintScrollBarArrow(HDC hdc, int iStateId, LPCRECT pRect, UINT dpi) {
+    // States 1-16 are normal, hot, pressed and disabled for each of up, down,
+    // left and right. States 17-20 are hover for each direction.
+    int direction;
+    int state;
+    if (iStateId >= ABS_UPNORMAL && iStateId <= ABS_RIGHTDISABLED) {
+        direction = (iStateId - ABS_UPNORMAL) / 4;
+        state = (iStateId - ABS_UPNORMAL) % 4 + 1;
+    } else if (iStateId >= ABS_UPHOVER && iStateId <= ABS_RIGHTHOVER) {
+        direction = iStateId - ABS_UPHOVER;
+        state = 0;
+    } else {
+        return false;
+    }
+
+    FillRect(hdc, pRect, (HBRUSH)GetStockObject(BLACK_BRUSH));
+
+    // Arrows are hidden until the scroll bar is hovered.
+    if (state == 1) {
+        return true;
+    }
+
+    float scale = dpi / 96.0f;
+    float baseWidth = 7.0f * scale;
+    float arrowHeight = 4.5f * scale;
+    D2D1_COLOR_F color = ThemePartColor(128, 160, 160, 160);
+    if (state == 2) {
+        baseWidth = 8.0f * scale;
+        arrowHeight = 5.5f * scale;
+        color = ThemePartColor(192, 224, 224, 224);
+    } else if (state == 4) {
+        color = ThemePartColor(192, 64, 64, 64);
+    }
+
+    // An up arrow with a thick base, rotated clockwise for the other
+    // directions.
+    D2D1_POINT_2F center = D2D1::Point2F((pRect->right - pRect->left) / 2.0f,
+                                         (pRect->bottom - pRect->top) / 2.0f);
+    const D2D1_POINT_2F points[] = {
+        {center.x - 1 - baseWidth / 2, center.y + arrowHeight / 2},
+        {center.x - 1 - baseWidth / 2, center.y + 2 + arrowHeight / 2},
+        {center.x + baseWidth / 2, center.y + 2 + arrowHeight / 2},
+        {center.x + baseWidth / 2, center.y + arrowHeight / 2},
+        {center.x, center.y - arrowHeight / 2},
+        {center.x - 1, center.y - arrowHeight / 2},
+    };
+
+    // Up, down, left, right.
+    constexpr float kRotationAngles[] = {0, 180, 270, 90};
+
+    auto renderTarget = CreateBoundRenderTarget(hdc, pRect);
+    if (!renderTarget) {
+        return false;
+    }
+
+    winrt::com_ptr<ID2D1PathGeometry> geometry;
+    winrt::com_ptr<ID2D1GeometrySink> sink;
+    winrt::com_ptr<ID2D1SolidColorBrush> brush;
+    if (FAILED(g_d2dFactory->CreatePathGeometry(geometry.put())) ||
+        FAILED(geometry->Open(sink.put())) ||
+        FAILED(renderTarget->CreateSolidColorBrush(color, brush.put()))) {
+        return false;
+    }
+
+    sink->BeginFigure(points[0], D2D1_FIGURE_BEGIN_FILLED);
+    sink->AddLines(points + 1, ARRAYSIZE(points) - 1);
+    sink->EndFigure(D2D1_FIGURE_END_CLOSED);
+    sink->Close();
+
+    renderTarget->BeginDraw();
+    renderTarget->SetTransform(
+        D2D1::Matrix3x2F::Rotation(kRotationAngles[direction], center));
+    renderTarget->FillGeometry(geometry.get(), brush.get());
+    return SUCCEEDED(renderTarget->EndDraw());
+}
+
+bool PaintScrollBarPart(HDC hdc,
+                        int iPartId,
+                        int iStateId,
+                        LPCRECT pRect,
+                        UINT dpi) {
+    switch (iPartId) {
+        case SBP_ARROWBTN:
+            return PaintScrollBarArrow(hdc, iStateId, pRect, dpi);
+
+        case SBP_THUMBBTNHORZ:
+        case SBP_THUMBBTNVERT:
+            return PaintScrollBarThumb(hdc, iPartId, iStateId, pRect, dpi);
+
+        case SBP_LOWERTRACKHORZ:
+        case SBP_UPPERTRACKHORZ:
+        case SBP_LOWERTRACKVERT:
+        case SBP_UPPERTRACKVERT:
+            FillRect(hdc, pRect, (HBRUSH)GetStockObject(BLACK_BRUSH));
+            return true;
+    }
+
+    return false;
+}
+
+bool PaintHeaderPart(HDC hdc,
+                     int iPartId,
+                     int iStateId,
+                     LPCRECT pRect,
+                     UINT dpi) {
+    if (iPartId != 0 && iPartId != HP_HEADERITEM) {
+        return false;
+    }
+
+    FillRect(hdc, pRect, (HBRUSH)GetStockObject(BLACK_BRUSH));
+
+    // Item states cycle through normal, hot and pressed.
+    if (iPartId == 0 || iStateId % 3 == 1) {
+        return true;
+    }
+
+    bool hot = iStateId % 3 == 2;
+    float scale = dpi / 96.0f;
+
+    HDC& cached = g_themePartCache[dpi].headerItem[hot ? 0 : 1];
+    if (!cached) {
+        int size = 24 * scale;
+        cached = CreateThemePartBitmap(
+            size, size, [&](ID2D1RenderTarget* renderTarget) {
+                winrt::com_ptr<ID2D1PathGeometry> geometry;
+                winrt::com_ptr<ID2D1GeometrySink> sink;
+                winrt::com_ptr<ID2D1SolidColorBrush> brush;
+                if (FAILED(g_d2dFactory->CreatePathGeometry(geometry.put())) ||
+                    FAILED(geometry->Open(sink.put())) ||
+                    FAILED(renderTarget->CreateSolidColorBrush(
+                        hot ? ThemePartColor(96, 144, 144, 144)
+                            : ThemePartColor(64, 144, 144, 144),
+                        brush.put()))) {
+                    return;
+                }
+
+                // Rounded bottom corners.
+                float radius = 6.0f * scale;
+                D2D1_SIZE_F arcSize = D2D1::SizeF(radius, radius);
+                sink->BeginFigure(D2D1::Point2F(0, 0),
+                                  D2D1_FIGURE_BEGIN_FILLED);
+                sink->AddLine(D2D1::Point2F(size, 0));
+                sink->AddLine(D2D1::Point2F(size, size - radius));
+                sink->AddArc(D2D1::ArcSegment(
+                    D2D1::Point2F(size - radius, size), arcSize, 0,
+                    D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+                sink->AddLine(D2D1::Point2F(radius, size));
+                sink->AddArc(D2D1::ArcSegment(
+                    D2D1::Point2F(0, size - radius), arcSize, 0,
+                    D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+                sink->EndFigure(D2D1_FIGURE_END_CLOSED);
+                sink->Close();
+
+                renderTarget->FillGeometry(geometry.get(), brush.get());
+            });
+        if (!cached) {
+            return false;
+        }
+    }
+
+    AlphaBlendNineGrid(hdc, pRect, cached, 12 * scale, 0, 11 * scale,
+                       12 * scale);
+    return true;
+}
+
+// The separator between the navigation pane and the content.
+bool PaintPaneSeparatorPart(HDC hdc, int iPartId, LPCRECT pRect) {
+    if (iPartId != 3 && iPartId != 4) {
+        return false;
+    }
+
+    FillRect(hdc, pRect, (HBRUSH)GetStockObject(BLACK_BRUSH));
+    return true;
+}
+
+using GetThemeClass_t = HRESULT(WINAPI*)(HTHEME hTheme,
+                                         LPWSTR pszClassName,
+                                         int cchClassName);
+GetThemeClass_t g_pGetThemeClass;
+
+bool PaintThemeBackground(HTHEME hTheme,
+                          HDC hdc,
+                          int iPartId,
+                          int iStateId,
+                          LPCRECT pRect,
+                          LPCRECT pClipRect) {
+    if (!g_pGetThemeClass || !IsEntireWindowEffectDC(hdc)) {
+        return false;
+    }
+
+    WCHAR themeClass[64];
+    if (FAILED(g_pGetThemeClass(hTheme, themeClass, ARRAYSIZE(themeClass)))) {
+        return false;
+    }
+
+    enum class Part { ScrollBar, Header, PaneSeparator };
+    Part part;
+    if (_wcsicmp(themeClass, L"ScrollBar") == 0) {
+        part = Part::ScrollBar;
+    } else if (_wcsicmp(themeClass, L"Header") == 0) {
+        part = Part::Header;
+    } else if (_wcsicmp(themeClass, L"PreviewPane") == 0) {
+        part = Part::PaneSeparator;
+    } else {
+        return false;
+    }
+
+    int savedDC = 0;
+    if (pClipRect) {
+        savedDC = SaveDC(hdc);
+        IntersectClipRect(hdc, pClipRect->left, pClipRect->top,
+                          pClipRect->right, pClipRect->bottom);
+    }
+
+    UINT dpi = GetThemePartDpi(hdc);
+
+    AcquireSRWLockExclusive(&g_themePartCacheLock);
+
+    bool painted = false;
+    switch (part) {
+        case Part::ScrollBar:
+            painted = PaintScrollBarPart(hdc, iPartId, iStateId, pRect, dpi);
+            break;
+        case Part::Header:
+            painted = PaintHeaderPart(hdc, iPartId, iStateId, pRect, dpi);
+            break;
+        case Part::PaneSeparator:
+            painted = PaintPaneSeparatorPart(hdc, iPartId, pRect);
+            break;
+    }
+
+    ReleaseSRWLockExclusive(&g_themePartCacheLock);
+
+    if (savedDC) {
+        RestoreDC(hdc, savedDC);
+    }
+
+    return painted;
+}
+
+using DrawThemeBackground_t = decltype(&DrawThemeBackground);
+DrawThemeBackground_t DrawThemeBackground_Original;
+HRESULT WINAPI DrawThemeBackground_Hook(HTHEME hTheme,
+                                        HDC hdc,
+                                        int iPartId,
+                                        int iStateId,
+                                        LPCRECT pRect,
+                                        LPCRECT pClipRect) {
+    if (PaintThemeBackground(hTheme, hdc, iPartId, iStateId, pRect,
+                             pClipRect)) {
+        return S_OK;
+    }
+
+    return DrawThemeBackground_Original(hTheme, hdc, iPartId, iStateId, pRect,
+                                        pClipRect);
+}
+
+using DrawThemeBackgroundEx_t = decltype(&DrawThemeBackgroundEx);
+DrawThemeBackgroundEx_t DrawThemeBackgroundEx_Original;
+HRESULT WINAPI DrawThemeBackgroundEx_Hook(HTHEME hTheme,
+                                          HDC hdc,
+                                          int iPartId,
+                                          int iStateId,
+                                          LPCRECT pRect,
+                                          const DTBGOPTS* pOptions) {
+    LPCRECT pClipRect = pOptions && (pOptions->dwFlags & DTBG_CLIPRECT)
+                            ? &pOptions->rcClip
+                            : nullptr;
+    if (PaintThemeBackground(hTheme, hdc, iPartId, iStateId, pRect,
+                             pClipRect)) {
+        return S_OK;
+    }
+
+    return DrawThemeBackgroundEx_Original(hTheme, hdc, iPartId, iStateId, pRect,
+                                          pOptions);
+}
+
+// Based on the Translucent Windows mod.
+void SetAccentBlurBehind(HWND hWnd, bool enable) {
+    // Without blur behind, the extended frame is drawn over the accent blur.
+    HRGN hRgn = enable ? CreateRectRgn(0, 0, -1, -1) : nullptr;
+    DWM_BLURBEHIND blurBehind = {
+        .dwFlags = DWM_BB_ENABLE | (enable ? DWM_BB_BLURREGION : 0u),
+        .fEnable = enable,
+        .hRgnBlur = hRgn,
+    };
+    DwmEnableBlurBehindWindow(hWnd, &blurBehind);
+    if (hRgn) {
+        DeleteObject(hRgn);
+    }
+
+    if (!enable) {
+        // Restore the accent policy set by WinUI when the window is created
+        // (ACCENT_ENABLE_HOSTBACKDROP).
+        BOOL useHostBackdropBrush = TRUE;
+        DwmSetWindowAttribute_Original(hWnd, DWMWA_USE_HOSTBACKDROPBRUSH,
+                                       &useHostBackdropBrush,
+                                       sizeof(useHostBackdropBrush));
+        return;
+    }
+
+    constexpr int ACCENT_ENABLE_ACRYLICBLURBEHIND = 4;
+
+    struct ACCENT_POLICY {
+        int AccentState;
+        int AccentFlags;
+        int GradientColor;
+        int AnimationId;
+    };
+
+    constexpr DWORD WCA_ACCENT_POLICY = 19;
+
+    struct WINDOWCOMPOSITIONATTRIBDATA {
+        DWORD Attrib;
+        PVOID pvData;
+        SIZE_T cbData;
+    };
+
+    using SetWindowCompositionAttribute_t =
+        BOOL(WINAPI*)(HWND, WINDOWCOMPOSITIONATTRIBDATA*);
+    static auto pSetWindowCompositionAttribute =
+        (SetWindowCompositionAttribute_t)GetProcAddress(
+            GetModuleHandle(L"user32.dll"), "SetWindowCompositionAttribute");
+    if (!pSetWindowCompositionAttribute) {
+        return;
+    }
+
+    ACCENT_POLICY accentPolicy = {
+        .AccentState = ACCENT_ENABLE_ACRYLICBLURBEHIND,
+        // AABBGGRR.
+        .GradientColor = 0x3A232323,
+    };
+
+    WINDOWCOMPOSITIONATTRIBDATA data = {
+        .Attrib = WCA_ACCENT_POLICY,
+        .pvData = &accentPolicy,
+        .cbData = sizeof(accentPolicy),
+    };
+
+    pSetWindowCompositionAttribute(hWnd, &data);
+}
+
 void ApplyBackgroundTranslucentEffect(
     HWND hWnd,
     std::optional<BackgroundTranslucentEffect> effectToApply = std::nullopt) {
@@ -9955,6 +11235,13 @@ void ApplyBackgroundTranslucentEffect(
 
     auto effect =
         effectToApply.value_or(GetEffectiveBackgroundTranslucentEffect());
+
+    bool entireWindowEffect =
+        effect != BackgroundTranslucentEffect::kDefault &&
+        g_settings.backgroundTranslucentEffectRegion ==
+            BackgroundTranslucentEffectRegion::kEntireWindow;
+    g_entireWindowEffectWndForThread = entireWindowEffect ? hWnd : nullptr;
+
     if (effect == BackgroundTranslucentEffect::kDefault) {
         if (!RemoveProp(hWnd, kBackgroundTranslucentEffectAppliedKey)) {
             return;
@@ -9978,6 +11265,9 @@ void ApplyBackgroundTranslucentEffect(
         case BackgroundTranslucentEffect::kDefault:
             backdropType = DWMSBT_TABBEDWINDOW;
             break;
+        case BackgroundTranslucentEffect::kBlur:
+            backdropType = DWMSBT_AUTO;
+            break;
         case BackgroundTranslucentEffect::kAcrylic:
             backdropType = DWMSBT_TRANSIENTWINDOW;
             break;
@@ -9994,6 +11284,8 @@ void ApplyBackgroundTranslucentEffect(
 
     DwmSetWindowAttribute_Original(hWnd, DWMWA_SYSTEMBACKDROP_TYPE,
                                    &backdropType, sizeof(backdropType));
+
+    SetAccentBlurBehind(hWnd, effect == BackgroundTranslucentEffect::kBlur);
 }
 
 void TriggerWindowCompositionUpdate(HWND hWnd) {
@@ -10003,6 +11295,11 @@ void TriggerWindowCompositionUpdate(HWND hWnd) {
     };
     SendMessage(hWnd, WM_WINDOWPOSCHANGED, 0, (LPARAM)&windowPos);
     SendMessage(hWnd, WM_DWMCOMPOSITIONCHANGED, 0, 0);
+
+    // Repaint the content, which is rendered differently with the effect
+    // extended to the entire window.
+    RedrawWindow(hWnd, nullptr, nullptr,
+                 RDW_INVALIDATE | RDW_ERASE | RDW_FRAME | RDW_ALLCHILDREN);
 }
 
 void OnWindowCreated(HWND hWnd, PCSTR funcName) {
@@ -10510,10 +11807,10 @@ void LoadSettings() {
     PCWSTR backgroundTranslucentEffectRegion =
         Wh_GetStringSetting(L"backgroundTranslucentEffectRegion");
     g_settings.backgroundTranslucentEffectRegion =
-        BackgroundTranslucentEffectRegion::kExplorerFrame;
-    if (wcscmp(backgroundTranslucentEffectRegion, L"entireWindow") == 0) {
+        BackgroundTranslucentEffectRegion::kEntireWindow;
+    if (wcscmp(backgroundTranslucentEffectRegion, L"explorerFrame") == 0) {
         g_settings.backgroundTranslucentEffectRegion =
-            BackgroundTranslucentEffectRegion::kEntireWindow;
+            BackgroundTranslucentEffectRegion::kExplorerFrame;
     }
     Wh_FreeStringSetting(backgroundTranslucentEffectRegion);
 
@@ -10523,6 +11820,9 @@ void LoadSettings() {
     if (wcscmp(backgroundTranslucentEffect, L"default") == 0) {
         g_settings.backgroundTranslucentEffect =
             BackgroundTranslucentEffect::kDefault;
+    } else if (wcscmp(backgroundTranslucentEffect, L"acrylicblur") == 0) {
+        g_settings.backgroundTranslucentEffect =
+            BackgroundTranslucentEffect::kBlur;
     } else if (wcscmp(backgroundTranslucentEffect, L"acrylic") == 0) {
         g_settings.backgroundTranslucentEffect =
             BackgroundTranslucentEffect::kAcrylic;
@@ -10577,6 +11877,49 @@ BOOL Wh_ModInit() {
     WindhawkUtils::SetFunctionHook(DwmExtendFrameIntoClientArea,
                                    DwmExtendFrameIntoClientArea_Hook,
                                    &DwmExtendFrameIntoClientArea_Original);
+
+    InitTextAlphaLuts();
+
+    WindhawkUtils::SetFunctionHook(BeginPaint, BeginPaint_Hook,
+                                   &BeginPaint_Original);
+
+    WindhawkUtils::SetFunctionHook(EndPaint, EndPaint_Hook, &EndPaint_Original);
+
+    WindhawkUtils::SetFunctionHook(CreateCompatibleDC, CreateCompatibleDC_Hook,
+                                   &CreateCompatibleDC_Original);
+
+    WindhawkUtils::SetFunctionHook(DeleteDC, DeleteDC_Hook, &DeleteDC_Original);
+
+    WindhawkUtils::SetFunctionHook(ExtTextOutW, ExtTextOutW_Hook,
+                                   &ExtTextOutW_Original);
+
+    WindhawkUtils::SetFunctionHook(FillRect, FillRect_Hook, &FillRect_Original);
+
+    WindhawkUtils::SetFunctionHook(PatBlt, PatBlt_Hook, &PatBlt_Original);
+
+    WindhawkUtils::SetFunctionHook(Polyline, Polyline_Hook, &Polyline_Original);
+
+    WindhawkUtils::SetFunctionHook(DrawThemeBackground,
+                                   DrawThemeBackground_Hook,
+                                   &DrawThemeBackground_Original);
+
+    WindhawkUtils::SetFunctionHook(DrawThemeBackgroundEx,
+                                   DrawThemeBackgroundEx_Hook,
+                                   &DrawThemeBackgroundEx_Original);
+
+    HMODULE uxthemeModule = GetModuleHandle(L"uxtheme.dll");
+    if (uxthemeModule) {
+        g_pGetThemeClass = (GetThemeClass_t)GetProcAddress(
+            uxthemeModule, MAKEINTRESOURCEA(74));
+
+        auto pDrawTextWithGlow = (DrawTextWithGlow_t)GetProcAddress(
+            uxthemeModule, MAKEINTRESOURCEA(126));
+        if (pDrawTextWithGlow) {
+            WindhawkUtils::SetFunctionHook(pDrawTextWithGlow,
+                                           DrawTextWithGlow_Hook,
+                                           &DrawTextWithGlow_Original);
+        }
+    }
 
     HMODULE user32Module =
         LoadLibraryEx(L"user32.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
@@ -10675,6 +12018,8 @@ void Wh_ModUninit() {
             },
             (PVOID)hTargetWnd);
     }
+
+    ClearThemePartCache();
 }
 
 void Wh_ModSettingsChanged() {

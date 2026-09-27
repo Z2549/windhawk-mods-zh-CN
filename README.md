@@ -4,8 +4,8 @@ Windhawk 汉化 mod 的个人整合仓库。这里的每个 `.wh.cpp` 都是**�
 元数据（`@name:zh-CN` / `@description:zh-CN`）、设置项（`$name:zh-CN` / `$description:zh-CN` /
 `$options:zh-CN`）以及 `==WindhawkModReadme==` 说明正文全部为简体中文。
 
-共 **79** 个 mod：76 个来自 [m417z/my-windhawk-mods](https://github.com/m417z/my-windhawk-mods)，
-3 个来自其他作者的已安装 mod。
+共 **93** 个 mod：76 个来自 [m417z/my-windhawk-mods](https://github.com/m417z/my-windhawk-mods)，
+17 个来自其他作者。
 
 > **关于上游提交**：本仓库的「完全汉化版」（含 Readme 中文正文）**仅在本仓库使用**。
 > Readme 无法通过官方本地化机制做多语言，因此不会把 Readme 中文版提交到他人仓库；
@@ -22,7 +22,8 @@ Windhawk 汉化 mod 的个人整合仓库。这里的每个 `.wh.cpp` 都是**�
 
 ## 说明
 
-- **换行符**：与各上游仓库保持一致（m417z 的 mod 为 CRLF，digart11 / aubymori 的为 LF），未做统一改写。
+- **换行符**：与各上游仓库保持一致，未做统一改写（m417z 系 mod 多为 CRLF，其余作者多为 LF）。
+- **版本号**：`@version` 一律沿用上游版本号，不做本地自增，便于与商店版本直接对照。
 - **未翻译的内容**：专有名词（主题名、字体名、`JavaScript`/`CSS`/`Electron main.js` 等选项）
   保留原文，便于与上游文档和主题页面一一对应。
 - **`AltDrag`、`NoFlashWindow`** 两个 mod 的名称本身即专有名词，故未添加 `@name:zh-CN`。
@@ -110,13 +111,27 @@ Windhawk 汉化 mod 的个人整合仓库。这里的每个 `.wh.cpp` 都是**�
 | 75 | `windows-11-start-menu-styler` | Windows 11 开始菜单样式器 | [m417z](https://github.com/m417z) |
 | 76 | `windows-11-taskbar-styler` | Windows 11 任务栏样式器 | [m417z](https://github.com/m417z) |
 
-### 来自其他作者（3 个）
+### 来自其他作者（17 个）
 
 | # | Mod | 中文名称 | 作者 |
 |---|---|---|---|
-| 1 | `file-operation-styler` | 文件操作窗口美化 | [digART](https://github.com/digart11) |
-| 2 | `modernize-folder-picker-dialog` | 现代化文件夹选择对话框 | [aubymori](https://github.com/aubymori) |
-| 3 | `translucent-windows` | 半透明窗口效果 | [Undisputed00x](https://github.com/Undisputed00x) |
+| 1 | `antigravity-portable` | Antigravity IDE 便携版 | [easyatm](https://github.com/easyatm) |
+| 2 | `caps-ime-switcher` | Caps 输入法切换器 | [ZeonXr](https://github.com/ZeonXr) |
+| 3 | `chinese-ime-fixed-mode` | 中文输入法固定模式 | [barry](https://github.com/barrypp) |
+| 4 | `close-explorer-on-esc` | 按 Esc 关闭资源管理器 | [lieyanbang](https://github.com/lieyanbang) |
+| 5 | `explorer-ctrln-newfile` | 用 ctrl+n 创建新文件 | [lieyanbang](https://github.com/lieyanbang) |
+| 6 | `file-operation-styler` | 文件操作窗口美化 | [digART](https://github.com/digart11) |
+| 7 | `ime-mode-lock` | 输入法原生模式锁定 | [ZeonXr](https://github.com/ZeonXr) |
+| 8 | `modernize-folder-picker-dialog` | 现代化文件夹选择对话框 | [aubymori](https://github.com/aubymori) |
+| 9 | `mouse-trail` | 鼠标拖尾 | [MCheng404](https://github.com/MCheng404) |
+| 10 | `office-fix-account-disp-name` | Office 修复右上角账户名显示 | [Joe Ye](https://github.com/JoeYe-233) |
+| 11 | `taskbar-autohide-better` | 更好的任务栏自动隐藏 | [Cirn09](https://github.com/Cirn09) |
+| 12 | `taskbar-brightness-and-opacity-tuner` | 任务栏亮度和透明度调节器 | [lzxujun](https://github.com/lzxujun) |
+| 13 | `taskbar-icon-group-centering` | 任务栏图标组居中 | [Suioio](https://github.com/Suioio) |
+| 14 | `translucent-windows` | 半透明窗口效果 | [Undisputed00x](https://github.com/Undisputed00x) |
+| 15 | `visio-pan-zoom` | Visio 中键平移与智能缩放 | [Joe Ye](https://github.com/JoeYe-233) |
+| 16 | `win-d-per-monitor` | Win+D 仅作用于当前显示器（显示桌面） | [easyatm](https://github.com/easyatm) |
+| 17 | `win11-power-buttons` | Windows 11 开始菜单一键电源按钮 | [Hakuuyosei](https://github.com/ahzvenol) |
 
 ## 致谢
 
